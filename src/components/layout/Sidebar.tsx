@@ -49,11 +49,11 @@ export function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-primary-600 text-white shadow-sm'
+                  ? 'bg-emerald-500 text-white shadow-sm'
                   : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
               }`}
             >
-              <span className={isActive ? 'text-primary-100' : 'text-slate-500'}>
+              <span className={isActive ? 'text-emerald-100' : 'text-slate-500'}>
                 {item.icon}
               </span>
               {item.label}
@@ -65,14 +65,14 @@ export function Sidebar() {
   );
 
   return (
-    <aside className="w-[260px] h-screen bg-slate-950 border-r border-slate-800 flex flex-col fixed left-0 top-0 overflow-y-auto shadow-2xl shadow-slate-950/20 z-20">
+    <aside className="w-[260px] bg-slate-900 h-screen fixed left-0 top-0 border-r border-slate-800 flex flex-col z-20 shadow-2xl shadow-slate-900/20 overflow-y-auto">
       {/* Brand */}
       <div className="h-16 flex items-center px-6 border-b border-slate-800">
         <Link href="/brand/dashboard" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-primary-500/20 flex items-center justify-center">
-            <Layers className="text-primary-400 w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <Layers size={20} />
           </div>
-          <span className="font-display font-bold text-lg text-white">
+          <span className="font-bold text-white text-lg tracking-tight">
             BrandFlow
           </span>
         </Link>
@@ -117,7 +117,7 @@ export function Sidebar() {
             </span>
           </div>
           <div className="overflow-hidden">
-            <div className="text-sm font-semibold text-white truncate group-hover:text-primary-400 transition-colors">
+            <div className="text-sm font-semibold text-white truncate group-hover:text-emerald-400 transition-colors">
               {brandProfile?.companyName || 'TechBrand Inc.'}
             </div>
             <div className="text-xs text-slate-500 truncate">

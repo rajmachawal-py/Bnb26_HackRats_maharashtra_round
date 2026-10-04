@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Building2, UserCheck, ArrowRight, ShieldCheck, Zap, BarChart3, CheckCircle2, ChevronRight, PlusCircle } from 'lucide-react';
+import { Building2, UserCheck, ArrowRight, ShieldCheck, Zap, BarChart3, CheckCircle2, ChevronRight, PlusCircle, Layers } from 'lucide-react';
 import { useBrandProfile } from '@/lib/brandContext';
 import { useRole } from '@/lib/roleContext';
 
@@ -88,7 +88,7 @@ export default function LandingPage() {
         {/* Trusted By Marquee (Scroller) */}
         <div className="w-full max-w-5xl mx-auto mb-16 overflow-hidden relative">
           <p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6">
-            Trusted by top brands in India and globally
+            Top Brands in India and Globally
           </p>
           {/* Fading Edges */}
           <div className="absolute top-0 left-0 w-24 h-full bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>

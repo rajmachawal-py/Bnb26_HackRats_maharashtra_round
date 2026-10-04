@@ -6,8 +6,8 @@ import { RoleSwitcher } from '@/components/common/RoleSwitcher';
 import { DynamicLayout } from '@/components/layout/DynamicLayout';
 
 export const metadata: Metadata = {
-  title: 'CreatorFlow | Creator–Brand Collaboration Network',
-  description: 'A professional B2B SaaS for creator discovery and campaign management.',
+  title: 'Collaboration | Creator–Brand Collaboration Network',
+  description: 'Collaboration provides unified infrastructure for brands and professional creators to manage campaigns, compliance, and escrow payouts.',
 };
 
 export default function RootLayout({
