@@ -34,7 +34,7 @@ export default function DashboardPage() {
     return (
       <div className="max-w-6xl mx-auto py-20 flex flex-col items-center justify-center gap-3">
         <div className="w-8 h-8 border-2 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
-        <p className="text-sm text-slate-500 font-medium">Loading Brand OS...</p>
+        <p className="text-sm text-slate-500 font-medium">Loading Brand Portal...</p>
       </div>
     );
   }

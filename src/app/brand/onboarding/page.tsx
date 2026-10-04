@@ -152,7 +152,7 @@ export default function BrandOnboardingPage() {
           </div>
           <div>
             <span className="font-display font-bold text-lg text-slate-900">CreatorFlow</span>
-            <span className="text-xs text-primary-600 font-semibold block leading-none">Brand OS</span>
+            <span className="text-xs text-primary-600 font-semibold block leading-none">Brand Portal</span>
           </div>
         </Link>
 
@@ -423,7 +423,7 @@ export default function BrandOnboardingPage() {
                 </>
               ) : (
                 <>
-                  <span>Save Profile & Enter Brand OS</span>
+                  <span>Save Profile & Enter Brand Portal</span>
                   <ArrowRight size={18} />
                 </>
               )}
@@ -434,7 +434,7 @@ export default function BrandOnboardingPage() {
 
       {/* Footer Info */}
       <div className="mt-8 text-center text-xs text-slate-400">
-        CreatorFlow OS • BNB&apos;26 Hackathon Prototype • Profile saved locally to browser
+        Collaboration Platform • BNB&apos;26 Hackathon Prototype • Profile saved locally to browser
       </div>
     </div>
   );

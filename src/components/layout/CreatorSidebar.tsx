@@ -30,7 +30,7 @@ export function CreatorSidebar() {
           <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
             <Layers size={20} />
           </div>
-          <span className="font-bold text-white text-lg tracking-tight">CreatorOS</span>
+          <span className="font-bold text-white text-lg tracking-tight">CreatorFlow</span>
         </Link>
       </div>
 

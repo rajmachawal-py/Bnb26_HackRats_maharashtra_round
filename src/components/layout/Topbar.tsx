@@ -21,18 +21,6 @@ export function Topbar() {
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Simple role switcher for demo purposes */}
-        <select 
-          className="text-sm border-slate-200 rounded-md bg-slate-50 py-1.5 pl-3 pr-8 focus:ring-primary-500"
-          value={currentRole}
-          onChange={(e) => setRole(e.target.value as any)}
-        >
-          <option value="brand">Brand Mode</option>
-          <option value="creator">Creator Mode</option>
-          <option value="unclaimed">Unclaimed Mode</option>
-          <option value="verify">Audit Mode</option>
-        </select>
-
         <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-500 transition-colors relative">
           <Bell className="w-5 h-5" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 border-2 border-white"></span>
