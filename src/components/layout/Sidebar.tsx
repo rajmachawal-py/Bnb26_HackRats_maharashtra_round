@@ -20,11 +20,11 @@ export function Sidebar() {
   const pathname = usePathname();
 
   const mainNav = [
-    { label: 'Dashboard', href: '/', icon: <LayoutDashboard size={18} /> },
-    { label: 'Discover Creators', href: '/discover', icon: <Search size={18} /> },
-    { label: 'Campaigns', href: '/campaigns/new', icon: <Megaphone size={18} /> },
+    { label: 'Dashboard', href: '/brand/dashboard', icon: <LayoutDashboard size={18} /> },
+    { label: 'Discover Creators', href: '/brand/discover', icon: <Search size={18} /> },
+    { label: 'Campaigns', href: '/brand/campaigns', icon: <Megaphone size={18} /> },
     { label: 'Deal Room', href: '/deals/DEAL-2026-X89B', icon: <Handshake size={18} /> },
-    { label: 'Workspace', href: '/campaigns/campaign-cyberflow-launch', icon: <Briefcase size={18} /> },
+    { label: 'Workspace', href: '/brand/campaigns/campaign-cyberflow-launch', icon: <Briefcase size={18} /> },
   ];
 
   const managementNav = [
@@ -33,8 +33,8 @@ export function Sidebar() {
   ];
 
   const systemNav = [
-    { label: 'Settings', href: '#', icon: <Settings size={18} /> },
-    { label: 'Help & Support', href: '#', icon: <HelpCircle size={18} /> },
+    { label: 'Settings', href: '/brand/settings', icon: <Settings size={18} /> },
+    { label: 'Help & Support', href: '/brand/support', icon: <HelpCircle size={18} /> },
   ];
 
   const renderNavItems = (items: typeof mainNav) => (
@@ -66,7 +66,7 @@ export function Sidebar() {
     <aside className="w-[260px] h-screen bg-white border-r border-slate-200 flex flex-col fixed left-0 top-0 overflow-y-auto">
       {/* Brand */}
       <div className="h-16 flex items-center px-6 border-b border-slate-200">
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href="/brand/dashboard" className="flex items-center gap-2 group">
           <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center">
             <Layers className="text-white w-4 h-4" />
           </div>

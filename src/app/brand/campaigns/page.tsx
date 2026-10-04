@@ -34,7 +34,7 @@ export default function CampaignsDashboardPage() {
           </p>
         </div>
 
-        <Link href="/campaigns/new" className="btn btn-primary">
+        <Link href="/brand/campaigns/new" className="btn btn-primary">
           <Plus size={16} />
           <span>Create Campaign</span>
         </Link>
@@ -82,7 +82,7 @@ export default function CampaignsDashboardPage() {
 
           <div className="flex flex-wrap items-center gap-3">
             <Link
-              href="/campaigns/cyberflow/workspace"
+              href="/brand/campaigns/campaign-cyberflow-launch"
               className="btn btn-primary"
             >
               <Briefcase size={16} />
