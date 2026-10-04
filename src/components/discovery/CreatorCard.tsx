@@ -26,7 +26,7 @@ export function CreatorCard({ creator, onOpenIntelligence, onSendOffer }: Creato
     <div
       className={`glass-card flex flex-col justify-between transition-all duration-300 group ${
         isUnclaimed
-          ? 'hover:border-amber-500/50 hover:shadow-amber-950/30'
+          ? 'hover:border-cyan-500/50 hover:shadow-cyan-950/30'
           : 'hover:border-violet-500/50 hover:shadow-violet-950/40'
       }`}
     >
@@ -63,7 +63,7 @@ export function CreatorCard({ creator, onOpenIntelligence, onSendOffer }: Creato
                 src={creator.avatar}
                 alt={creator.name}
                 className={`w-16 h-16 rounded-2xl object-cover border-2 shadow-xl ${
-                  isUnclaimed ? 'border-amber-400/80 shadow-amber-950/40' : 'border-violet-400/80 shadow-violet-950/40'
+                  isUnclaimed ? 'border-cyan-400/80 shadow-cyan-950/40' : 'border-violet-400/80 shadow-violet-950/40'
                 }`}
               />
               {creator.state === 'claimed' && (
@@ -168,12 +168,12 @@ export function CreatorCard({ creator, onOpenIntelligence, onSendOffer }: Creato
             )}
           </div>
 
-          {/* Unclaimed Warning Banner or Claimed Highlights */}
+          {/* Network Banner or Partner Highlights */}
           {isUnclaimed ? (
-            <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-start gap-1.5 text-[11px] text-amber-300">
-              <ShieldAlert size={14} className="flex-shrink-0 mt-0.5 text-amber-400" />
+            <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-start gap-1.5 text-[11px] text-cyan-300">
+              <Sparkles size={14} className="flex-shrink-0 mt-0.5 text-cyan-400" />
               <span>
-                Public profile. Representation by <strong>{creator.managerContact?.agency}</strong>.
+                Verified Global Talent. Outreach routed securely via <strong>{creator.managerContact?.agency}</strong>.
               </span>
             </div>
           ) : (
@@ -208,10 +208,10 @@ export function CreatorCard({ creator, onOpenIntelligence, onSendOffer }: Creato
           
           <button
             onClick={() => onSendOffer ? onSendOffer(creator) : onOpenIntelligence(creator)}
-            className={`btn btn-sm ${isUnclaimed ? 'btn-glass text-amber-300 border-amber-500/30' : 'btn-primary'}`}
+            className={`btn btn-sm ${isUnclaimed ? 'btn-glass text-cyan-300 border-cyan-500/30' : 'btn-primary'}`}
           >
             {isUnclaimed ? (
-              <span>Contact Mgmt</span>
+              <span>Outreach</span>
             ) : (
               <>
                 <Sparkles size={12} />

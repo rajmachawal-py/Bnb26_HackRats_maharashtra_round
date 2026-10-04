@@ -27,6 +27,8 @@ const AVAILABLE_NICHES = [
 ];
 
 export function BriefForm({ onSubmit, isLoading }: BriefFormProps) {
+  const [ideaInput, setIdeaInput] = useState('');
+  const [isGeneratingBrief, setIsGeneratingBrief] = useState(false);
   const [brief, setBrief] = useState<CampaignBrief>({
     brandName: '',
     brandWebsite: '',
@@ -56,8 +58,25 @@ export function BriefForm({ onSubmit, isLoading }: BriefFormProps) {
     maxRevisionRounds: 2,
   });
 
-  const handlePreFillDemo = () => {
-    setBrief({ ...DEMO_CAMPAIGN.brief });
+  const handleAIGenerate = async () => {
+    if (!ideaInput.trim()) return;
+    setIsGeneratingBrief(true);
+    try {
+      const res = await fetch('/api/ai/generate-brief', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idea: ideaInput }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setBrief({ ...brief, ...data.brief });
+        setIdeaInput('');
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsGeneratingBrief(false);
+    }
   };
 
   const handleTalkingPointChange = (index: number, value: string) => {
@@ -101,25 +120,45 @@ export function BriefForm({ onSubmit, isLoading }: BriefFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {/* Top Banner with One-Click Pre-fill */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-violet-950/70 via-slate-900/80 to-cyan-950/70 border border-violet-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      {/* AI Autofill Banner */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-violet-950/70 via-slate-900/80 to-cyan-950/70 border border-violet-500/30 flex flex-col gap-3 shadow-lg shadow-violet-900/20">
         <div className="flex items-center gap-2.5">
           <Sparkles size={18} className="text-cyan-400 flex-shrink-0" />
           <div className="text-xs">
-            <span className="font-bold text-white block">Hackathon Demo Shortcut</span>
+            <span className="font-bold text-white block">AI Campaign Autofill</span>
             <span className="text-slate-400">
-              Pre-fill with CyberFlow AI campaign data for immediate evaluation.
+              Describe your idea in one sentence and let AI generate the entire structured brief.
             </span>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={handlePreFillDemo}
-          className="btn btn-primary btn-sm flex-shrink-0"
-        >
-          <Sparkles size={13} />
-          <span>Pre-fill Demo Brief</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={ideaInput}
+            onChange={(e) => setIdeaInput(e.target.value)}
+            placeholder="e.g. A campaign for a new fitness app targeting Indian college students"
+            className="input-field text-xs flex-1 border-violet-500/30 focus:border-cyan-400"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleAIGenerate();
+              }
+            }}
+          />
+          <button
+            type="button"
+            onClick={handleAIGenerate}
+            disabled={isGeneratingBrief || !ideaInput.trim()}
+            className="btn btn-primary btn-sm flex-shrink-0 whitespace-nowrap"
+          >
+            {isGeneratingBrief ? (
+              <div className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+            ) : (
+              <Sparkles size={13} />
+            )}
+            <span>{isGeneratingBrief ? 'Generating...' : 'Auto-Fill'}</span>
+          </button>
+        </div>
       </div>
 
       {/* SECTION 1: Brand & Product Profile */}

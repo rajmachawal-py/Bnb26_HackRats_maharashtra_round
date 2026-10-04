@@ -1,20 +1,19 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { SEED_CREATORS } from '@/lib/seedData';
 import { Creator } from '@/types/creator';
 import { FilterRail, FilterState } from '@/components/discovery/FilterRail';
 import { CreatorCard } from '@/components/discovery/CreatorCard';
 import { IntelligenceDrawer } from '@/components/discovery/IntelligenceDrawer';
-import { Compass, Users, AlertTriangle, ShieldCheck, Sparkles } from 'lucide-react';
+import { Compass, Users, Globe, ShieldCheck, Sparkles } from 'lucide-react';
 
 const INITIAL_FILTERS: FilterState = {
   searchQuery: '',
   niche: 'all',
   platform: 'all',
   state: 'all',
-  maxBudget: 50000,
 };
 
 export default function DiscoverPage() {
@@ -23,49 +22,42 @@ export default function DiscoverPage() {
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Filtered creators list
-  const filteredCreators = useMemo(() => {
-    return SEED_CREATORS.filter((c) => {
-      // 1. Keyword search
-      if (filters.searchQuery) {
-        const query = filters.searchQuery.toLowerCase();
-        const matchesName = c.name.toLowerCase().includes(query);
-        const matchesBio = c.bio.toLowerCase().includes(query);
-        const matchesHeadline = c.headline.toLowerCase().includes(query);
-        const matchesNiche = c.niche.some((n) => n.toLowerCase().includes(query));
-        if (!matchesName && !matchesBio && !matchesHeadline && !matchesNiche) {
-          return false;
+  const [creators, setCreators] = useState<Creator[]>(SEED_CREATORS);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Live search via API
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCreators = async () => {
+      setIsLoading(true);
+      try {
+        const queryParams = new URLSearchParams({
+          q: filters.searchQuery,
+          niche: filters.niche,
+          platform: filters.platform,
+          state: filters.state
+        });
+        const res = await fetch(`/api/creators?${queryParams.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted) setCreators(data.creators);
         }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
+    };
+    
+    // Debounce to prevent spamming API while typing
+    const timeoutId = setTimeout(() => {
+      fetchCreators();
+    }, 500);
 
-      // 2. Niche
-      if (filters.niche !== 'all') {
-        const hasNiche = c.niche.some(
-          (n) => n.toLowerCase() === filters.niche.toLowerCase()
-        );
-        if (!hasNiche) return false;
-      }
-
-      // 3. Platform
-      if (filters.platform !== 'all') {
-        if (filters.platform === 'youtube' && !c.platforms.youtube) return false;
-        if (filters.platform === 'twitch' && !c.platforms.twitch) return false;
-        if (filters.platform === 'instagram' && !c.platforms.instagram) return false;
-        if (filters.platform === 'github' && !c.platforms.github) return false;
-      }
-
-      // 4. Claimed State
-      if (filters.state !== 'all') {
-        if (c.state !== filters.state) return false;
-      }
-
-      // 5. Budget
-      if (c.rates.dedicatedVideo > filters.maxBudget) {
-        return false;
-      }
-
-      return true;
-    });
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
+    };
   }, [filters]);
 
   const handleOpenIntelligence = (creator: Creator) => {
@@ -95,7 +87,7 @@ export default function DiscoverPage() {
             Creator Intelligence & Discovery
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
-            Discover claimed creators ready for immediate campaign collaboration, or browse established unclaimed profiles with verified manager contact routes.
+            Search our Verified Partners for immediate campaign collaboration, or browse the Global Index to connect securely with any creator in the world.
           </p>
         </div>
 
@@ -110,19 +102,19 @@ export default function DiscoverPage() {
             }`}
           >
             <ShieldCheck size={14} className="text-emerald-400" />
-            <span>{claimedCount} Claimed</span>
+            <span>{claimedCount} Partners</span>
           </button>
 
           <button
             onClick={() => setFilters({ ...filters, state: 'unclaimed' })}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-medium transition-all ${
               filters.state === 'unclaimed'
-                ? 'bg-amber-500/20 border-amber-500/50 text-amber-200'
+                ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-200'
                 : 'bg-slate-900/60 border-white/10 text-slate-300 hover:border-white/20'
             }`}
           >
-            <AlertTriangle size={14} className="text-amber-400" />
-            <span>{unclaimedCount} Unclaimed</span>
+            <Globe size={14} className="text-cyan-400" />
+            <span>{unclaimedCount} Global Index</span>
           </button>
         </div>
       </div>
@@ -134,12 +126,17 @@ export default function DiscoverPage() {
           filters={filters}
           onChange={setFilters}
           onReset={() => setFilters(INITIAL_FILTERS)}
-          totalResults={filteredCreators.length}
+          totalResults={creators.length}
         />
 
         {/* Right Creator Grid */}
         <div className="flex-1 w-full">
-          {filteredCreators.length === 0 ? (
+          {isLoading ? (
+            <div className="p-12 rounded-2xl bg-slate-900/40 border border-white/10 text-center flex flex-col items-center gap-3">
+              <Sparkles size={32} className="text-violet-400 animate-spin" />
+              <h3 className="text-base font-bold text-white">Live Searching APIs...</h3>
+            </div>
+          ) : creators.length === 0 ? (
             <div className="p-12 rounded-2xl bg-slate-900/40 border border-white/10 text-center flex flex-col items-center gap-3">
               <Users size={32} className="text-slate-500" />
               <h3 className="text-base font-bold text-white">No creators match your filters</h3>
@@ -155,7 +152,7 @@ export default function DiscoverPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {filteredCreators.map((creator) => (
+              {creators.map((creator) => (
                 <CreatorCard
                   key={creator.id}
                   creator={creator}

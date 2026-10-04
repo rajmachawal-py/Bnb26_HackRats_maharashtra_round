@@ -21,14 +21,12 @@ export function GlobalHeader() {
     { label: 'Discover Creators', href: '/discover', icon: <Compass size={16} /> },
     { label: 'Campaign Builder', href: '/campaigns/new', icon: <PlusCircle size={16} /> },
     { label: 'Deal Room', href: '/deals/DEAL-2026-X89B', icon: <FileText size={16} /> },
-    { label: 'Workspace Hub', href: '/campaigns/cyberflow/workspace', icon: <Briefcase size={16} /> },
+    { label: 'Workspace Hub', href: '/campaigns/campaign-cyberflow-launch', icon: <Briefcase size={16} /> },
     { label: 'Trust Verification', href: '/deals/verify/DEAL-2026-X89B', icon: <ShieldCheck size={16} /> },
   ];
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
-      {/* Top spacing to account for floating RoleSwitcher */}
-      <div className="h-16 w-full" />
 
       <div className="page-container flex items-center justify-between py-3">
         {/* Brand Logo & Platform Title */}
@@ -40,7 +38,7 @@ export function GlobalHeader() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-display font-extrabold text-lg tracking-tight text-white group-hover:text-violet-300 transition-colors">
-                  SYNAPSE<span className="text-cyan-400">OS</span>
+                  Creator<span className="text-cyan-400">Flow</span>
                 </span>
                 <span className="hidden sm:inline-block text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
                   Trust Layer
@@ -61,6 +59,7 @@ export function GlobalHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   isActive
                     ? 'bg-violet-600/20 text-violet-200 border border-violet-500/30 shadow-sm'
@@ -111,7 +110,7 @@ export function GlobalHeader() {
             </Link>
           ) : currentRole === 'creator' ? (
             <Link
-              href="/campaigns/cyberflow/workspace"
+              href="/campaigns/campaign-cyberflow-launch"
               className="btn btn-primary btn-sm hidden md:inline-flex"
             >
               <Briefcase size={14} />

@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { RoleProvider } from '@/lib/roleContext';
-import { RoleSwitcher } from '@/components/common/RoleSwitcher';
 import { GlobalHeader } from '@/components/common/GlobalHeader';
 
 export const metadata: Metadata = {
-  title: 'SYNAPSE OS | Creator–Brand Collaboration Network',
+  title: 'CreatorFlow | Creator–Brand Collaboration Network',
   description: 'The shared operating layer connecting brands, creators, managers, and campaigns with verified contracts, AI brief compliance, and post-campaign growth history.',
 };
 
@@ -27,7 +26,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-[#080C14] text-slate-100 antialiased selection:bg-violet-600 selection:text-white">
         <RoleProvider>
           {/* Universal Demo Switcher floating on top */}
-          <RoleSwitcher />
+          {/* Universal Demo Switcher floating on top */}
 
           {/* Sticky Global Navigation */}
           <GlobalHeader />
@@ -39,7 +38,7 @@ export default function RootLayout({
           <footer className="border-t border-white/5 py-8 mt-16 bg-slate-950/60 backdrop-blur-md">
             <div className="page-container flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
               <div className="flex items-center gap-2">
-                <span className="font-display font-bold text-slate-400">SYNAPSE OS</span>
+                <span className="font-display font-bold text-slate-400">CreatorFlow</span>
                 <span>•</span>
                 <span>BNB&apos;26 Hackathon Prototype</span>
                 <span>•</span>

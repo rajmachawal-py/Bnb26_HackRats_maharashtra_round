@@ -8,7 +8,6 @@ export interface FilterState {
   niche: string;
   platform: string;
   state: string; // 'all' | 'claimed' | 'unclaimed'
-  maxBudget: number;
 }
 
 interface FilterRailProps {
@@ -36,9 +35,9 @@ const PLATFORMS = [
 ];
 
 const STATES = [
-  { id: 'all', label: 'All States' },
-  { id: 'claimed', label: 'Claimed Creators' },
-  { id: 'unclaimed', label: 'Unclaimed Profiles (Public)' },
+  { id: 'all', label: 'Entire Network' },
+  { id: 'claimed', label: 'Verified Partners' },
+  { id: 'unclaimed', label: 'Global Directory' },
 ];
 
 export function FilterRail({ filters, onChange, onReset, totalResults }: FilterRailProps) {
@@ -81,8 +80,7 @@ export function FilterRail({ filters, onChange, onReset, totalResults }: FilterR
       {/* 2. Profile Claimed State (Cold-Start Feature) */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
-          <span>Profile Status</span>
-          <span className="text-[10px] text-amber-400 font-mono">Cold-Start Model</span>
+          <span>Network Status</span>
         </label>
         <div className="flex flex-col gap-1.5">
           {STATES.map((s) => {
@@ -148,29 +146,6 @@ export function FilterRail({ filters, onChange, onReset, totalResults }: FilterR
               </button>
             );
           })}
-        </div>
-      </div>
-
-      {/* 5. Budget Slider */}
-      <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
-        <div className="flex items-center justify-between text-xs">
-          <label className="font-semibold text-slate-300">Max Dedicated Rate</label>
-          <span className="font-mono text-emerald-400 font-bold">
-            ${filters.maxBudget.toLocaleString()}
-          </span>
-        </div>
-        <input
-          type="range"
-          min={1000}
-          max={50000}
-          step={1000}
-          value={filters.maxBudget}
-          onChange={(e) => onChange({ ...filters, maxBudget: parseFloat(e.target.value) })}
-          className="w-full accent-violet-500 cursor-pointer"
-        />
-        <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-          <span>$1,000</span>
-          <span>$50,000</span>
         </div>
       </div>
     </aside>

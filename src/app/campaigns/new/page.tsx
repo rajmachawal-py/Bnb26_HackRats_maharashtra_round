@@ -15,6 +15,7 @@ export default function NewCampaignPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [matchedExplanations, setMatchedExplanations] = useState<CreatorMatchExplanation[] | null>(null);
+  const [matchedCreators, setMatchedCreators] = useState<Creator[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleRunMatching = async (brief: CampaignBrief) => {
@@ -34,6 +35,7 @@ export default function NewCampaignPage() {
 
       const data = await response.json();
       setMatchedExplanations(data.matches);
+      setMatchedCreators(data.creators || SEED_CREATORS);
     } catch (err) {
       console.error(err);
       setErrorMsg('Failed to run AI matching. Falling back to local scoring.');
@@ -48,6 +50,7 @@ export default function NewCampaignPage() {
           confidence: 'high' as const,
         }))
       );
+      setMatchedCreators(SEED_CREATORS);
     } finally {
       setIsLoading(false);
     }
@@ -139,7 +142,7 @@ export default function NewCampaignPage() {
           {!isLoading && matchedExplanations && (
             <div className="flex flex-col gap-4">
               {matchedExplanations.map((match) => {
-                const creator = SEED_CREATORS.find((c) => c.id === match.creatorId);
+                const creator = matchedCreators.find((c) => c.id === match.creatorId);
                 if (!creator) return null;
                 return (
                   <MatchExplanationCard

@@ -19,12 +19,12 @@ We are **not** building just another social media scraper, link-in-bio page, or 
 * **Our Solution:** A unified system that executes the complete business loop:  
   $$\textbf{Find} \longrightarrow \textbf{Trust} \longrightarrow \textbf{Deal} \longrightarrow \textbf{Create} \longrightarrow \textbf{Approve} \longrightarrow \textbf{Measure} \longrightarrow \textbf{Learn}$$
 
-### 💡 The Breakthrough Acquisition Model: 4-State Creator Lifecycle
-We solve the marketplace cold-start problem with our 4-state creator model:
-1. **Discoverable:** Indexed from legitimate public sources (Wikipedia, YouTube public stats).
-2. **Unclaimed:** Profile exists with public stats and a verified business manager/agency contact route.
-3. **Claimed:** Creator verifies ownership, receiving collaboration tools and direct workspace access.
-4. **Active:** Creator is engaged in live campaigns with contracts, deliverables, and performance tracking.
+### 💡 The Breakthrough Dual-Tier Model: Creator & Brand Synergy
+We solve the marketplace cold-start problem by dividing the ecosystem into two logical domains:
+1. **The Global Index (Mega-Creators):** Established creators with massive subscriber bases (e.g. 5M+ subs) are auto-indexed via real-time YouTube APIs. Brands can instantly discover and match with them using AI without requiring the creator to "sign up".
+2. **Verified Partners (Small-to-Medium Creators):** Growing creators who actively sign up, build their portfolios, and directly search the Deal Board for open brand campaigns.
+3. **AI-Powered Discovery:** Brand briefs are fed into Gemini 3.8 Flash, which cross-references the requirements against both tiers to find the mathematically perfect fit.
+4. **Active Workspace:** Once matched, both parties enter a shared workspace with a unified Deal Room, automated PDF contracts, and AI compliance auditing for content.
 
 ---
 

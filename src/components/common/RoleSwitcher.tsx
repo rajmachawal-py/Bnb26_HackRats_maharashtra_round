@@ -45,7 +45,7 @@ export function RoleSwitcher() {
   ];
 
   return (
-    <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1.5 p-1.5 rounded-full bg-slate-950/85 backdrop-blur-xl border border-violet-500/30 shadow-2xl shadow-violet-950/60 max-w-[96vw] overflow-x-auto">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1.5 p-1.5 rounded-full bg-slate-950/85 backdrop-blur-xl border border-violet-500/30 shadow-2xl shadow-violet-950/60 max-w-[96vw] overflow-x-auto">
       <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 border-r border-white/10 text-xs font-semibold text-violet-300">
         <Sparkles size={13} className="text-violet-400 animate-spin" style={{ animationDuration: '6s' }} />
         <span>DEMO DOCK</span>

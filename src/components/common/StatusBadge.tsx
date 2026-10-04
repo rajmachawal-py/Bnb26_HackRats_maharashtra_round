@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, AlertTriangle, ShieldCheck, Sparkles, Clock } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, ShieldCheck, Sparkles, Clock, Globe } from 'lucide-react';
 import { CreatorState } from '@/types/creator';
 import { DealStatus } from '@/types/deal';
 
@@ -26,15 +26,15 @@ export function StatusBadge({
       return (
         <span className={`badge badge-claimed ${size === 'sm' ? 'text-xs py-0.5 px-2' : ''}`}>
           <CheckCircle2 size={size === 'sm' ? 12 : 14} />
-          Claimed Creator
+          Verified Partner
         </span>
       );
     }
     if (state === 'unclaimed') {
       return (
-        <span className={`badge badge-unclaimed ${size === 'sm' ? 'text-xs py-0.5 px-2' : ''}`}>
-          <AlertTriangle size={size === 'sm' ? 12 : 14} />
-          Unclaimed Profile (Public)
+        <span className={`badge badge-cyan ${size === 'sm' ? 'text-xs py-0.5 px-2' : ''}`}>
+          <Globe size={size === 'sm' ? 12 : 14} />
+          Global Network
         </span>
       );
     }
