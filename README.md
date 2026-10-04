@@ -56,6 +56,12 @@ Marketplaces fail because established creators refuse to manually create another
 
 ## 🚀 Core Platform Modules
 
+### 0. 🏢 Brand Profile Setup & Onboarding (`/brand/onboarding`)
+- **Initial Gating:** Navigating to Brand OS gates first-time brands with a focused, distraction-free onboarding form.
+- **Structured Brand Schema:** Captures company name, tagline, industry, website, company size, target country, settlement currency, and monthly budget.
+- **Client-Side Persistence:** Synced to browser storage (`localStorage`) via `BrandContext` with full edit and reset capabilities in `/brand/settings`.
+- **Dynamic Personalization:** Injects the active brand into the Brand OS dashboard (`Good morning, {companyName}`), industry badges, and sidebar user profile initials.
+
 ### 1. 🎛️ Universal Demo Dock (Role Switcher)
 - Centered floating dock enabling evaluators to switch perspectives in real time:
   - **Brand Mode:** TechBrand Inc. (Create Briefs, Review Submissions, View Campaign Dashboards).

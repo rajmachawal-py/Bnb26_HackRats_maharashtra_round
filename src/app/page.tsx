@@ -1,8 +1,24 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Building2, UserCheck, ArrowRight } from 'lucide-react';
+import { useBrandProfile } from '@/lib/brandContext';
 
 export default function LandingPage() {
+  const router = useRouter();
+  const { isCompleted, brandProfile } = useBrandProfile();
+
+  const handleBrandClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isCompleted) {
+      router.push('/brand/dashboard');
+    } else {
+      router.push('/brand/onboarding');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
       <div className="max-w-3xl w-full text-center space-y-8">
@@ -24,19 +40,37 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8">
           {/* Brand Portal Card */}
-          <Link href="/brand/dashboard" className="saas-card p-8 flex flex-col items-center text-center hover:border-primary-300 hover:shadow-xl hover:shadow-primary-900/5 transition-all group">
+          <a
+            href={isCompleted ? '/brand/dashboard' : '/brand/onboarding'}
+            onClick={handleBrandClick}
+            className="saas-card p-8 flex flex-col items-center text-center hover:border-primary-300 hover:shadow-xl hover:shadow-primary-900/5 transition-all group cursor-pointer"
+          >
             <div className="w-16 h-16 rounded-2xl bg-primary-50 text-primary-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Building2 size={32} />
             </div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Brand OS</h2>
-            <p className="text-slate-500 mb-8">Discover creators, launch campaigns, and track ROI with precision.</p>
-            <div className="mt-auto w-full flex items-center justify-center gap-2 text-primary-600 font-semibold group-hover:gap-3 transition-all">
-              Enter Brand Portal <ArrowRight size={18} />
+            <div className="flex items-center gap-2 mb-2">
+              <h2 className="text-2xl font-bold text-slate-900">Brand OS</h2>
+              {isCompleted && brandProfile && (
+                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-primary-100 text-primary-700 font-bold">
+                  {brandProfile.companyName}
+                </span>
+              )}
             </div>
-          </Link>
+            <p className="text-slate-500 mb-8">
+              {isCompleted && brandProfile
+                ? `Continue as ${brandProfile.companyName}. Discover creators and manage active campaigns.`
+                : 'Complete brand setup, discover creators, launch campaigns, and track ROI with precision.'}
+            </p>
+            <div className="mt-auto w-full flex items-center justify-center gap-2 text-primary-600 font-semibold group-hover:gap-3 transition-all">
+              {isCompleted ? 'Enter Brand Dashboard' : 'Set Up Brand Profile'} <ArrowRight size={18} />
+            </div>
+          </a>
 
           {/* Creator Portal Card */}
-          <Link href="/creator/dashboard" className="saas-card p-8 flex flex-col items-center text-center hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-900/5 transition-all group">
+          <Link
+            href="/creator/dashboard"
+            className="saas-card p-8 flex flex-col items-center text-center hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-900/5 transition-all group"
+          >
             <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <UserCheck size={32} />
             </div>

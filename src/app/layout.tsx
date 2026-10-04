@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { RoleProvider } from '@/lib/roleContext';
+import { BrandProvider } from '@/lib/brandContext';
 import { RoleSwitcher } from '@/components/common/RoleSwitcher';
 
 export const metadata: Metadata = {
@@ -17,7 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased bg-slate-50 text-slate-900 min-h-screen">
         <RoleProvider>
-          {children}
+          <BrandProvider>
+            {children}
+          </BrandProvider>
         </RoleProvider>
       </body>
     </html>

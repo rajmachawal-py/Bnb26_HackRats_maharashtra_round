@@ -22,12 +22,21 @@ CreatorFlow is an end-to-end platform designed for both Brands and Creators. Our
 
 ## 🏢 Brand POV (How Brands Use CreatorFlow)
 
-### 1. Creator Discovery (`/discover`)
+### 0. Brand Profile Setup & Onboarding (`/brand/onboarding`)
+- **Initial Gating:** When a brand representative clicks "Brand OS" from the landing page, the platform verifies whether a brand profile has been configured.
+- **Guided Setup:** First-time brands are seamlessly routed to a focused, distraction-free onboarding form that captures:
+  - **Company Identity:** Company name, brand tagline, primary industry (e.g. Gaming, FinTech, D2C, SaaS, AI), and website.
+  - **Scale & Budget:** Company team size, target geography/country, default currency (e.g. INR, USD, EUR), and monthly influencer marketing budget.
+  - **Primary Marketer Contact:** Marketer's full name and corporate work email.
+- **Client-Side Persistence:** The profile is stored persistently in browser storage (`localStorage`) via `BrandContext`, eliminating friction without requiring complex database auth setups for live testing.
+- **Dynamic Portal Personalization:** Once completed, the brand is routed to `/brand/dashboard` where the entire workspace (hero greeting `Good morning, {companyName}`, industry badges, and sidebar user badges) dynamically reflects the brand's identity. Profile details can be reviewed, edited, or reset anytime under `/brand/settings`.
+
+### 1. Creator Discovery (`/discover` or `/brand/discover`)
 - **Global Search:** Brands search for creators by name, niche, or platform.
 - **Live Integration:** The platform pings the real **YouTube Data API** (explicitly biased for Indian creators via `regionCode=IN`) to fetch real-time subscriber and video stats.
 - **Enriched Intelligence:** When a brand clicks on a mega-creator, the **Wikipedia API** dynamically fetches their public biography to build a comprehensive "Intelligence Drawer".
 
-### 2. Campaign Builder & AI Matching (`/campaigns/new`)
+### 2. Campaign Builder & AI Matching (`/campaigns/new` or `/brand/campaigns`)
 - **Structured Briefs:** Brands create formal campaign briefs (defining budgets, target audiences, mandatory talking points, and deliverables).
 - **Live AI Sourcing:** When the brand clicks "Run AI Creator Matching," the backend searches YouTube for top Indian creators matching the campaign's specific niche.
 - **Gemini Evaluation:** These real creator profiles are fed into **Gemini AI**, which scores them against the brief and outputs transparent, explainable reasons why they are a good or bad fit.

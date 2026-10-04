@@ -1,5 +1,8 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   Plus, 
   Megaphone, 
@@ -7,27 +10,69 @@ import {
   Wallet,
   Clock,
   ArrowRight,
-  MoreHorizontal
+  MoreHorizontal,
+  Edit3
 } from 'lucide-react';
 import { SEED_CREATORS } from '@/lib/seedData';
 import { StatusBadge } from '@/components/common/StatusBadge';
 import { formatCompactNumber } from '@/lib/utils';
+import { useBrandProfile } from '@/lib/brandContext';
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const { brandProfile, isCompleted, isLoading } = useBrandProfile();
   const recommendedCreators = SEED_CREATORS.slice(0, 3);
+
+  // If brand accessed dashboard directly without completing profile, redirect to onboarding
+  useEffect(() => {
+    if (!isLoading && !isCompleted) {
+      router.push('/brand/onboarding');
+    }
+  }, [isLoading, isCompleted, router]);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto py-20 flex flex-col items-center justify-center gap-3">
+        <div className="w-8 h-8 border-2 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+        <p className="text-sm text-slate-500 font-medium">Loading Brand OS...</p>
+      </div>
+    );
+  }
+
+  const companyName = brandProfile?.companyName || 'TechBrand';
+  const tagline = brandProfile?.tagline;
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Good morning, TechBrand</h1>
-          <p className="text-slate-500 mt-1">Here&apos;s what&apos;s happening across your creator partnerships.</p>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-slate-900">Good morning, {companyName}</h1>
+            {brandProfile?.industry && (
+              <span className="hidden sm:inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                {brandProfile.industry}
+              </span>
+            )}
+          </div>
+          <p className="text-slate-500 mt-1 text-sm">
+            {tagline ? `${tagline} • ` : ''}Here&apos;s what&apos;s happening across your creator partnerships.
+          </p>
         </div>
-        <Link href="/brand/campaigns/new" className="btn btn-primary">
-          <Plus size={16} />
-          Create Campaign
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link 
+            href="/brand/onboarding" 
+            className="btn btn-secondary text-xs flex items-center gap-1.5"
+            title="Edit Brand Profile"
+          >
+            <Edit3 size={14} className="text-slate-500" />
+            <span>Edit Profile</span>
+          </Link>
+          <Link href="/brand/campaigns/new" className="btn btn-primary">
+            <Plus size={16} />
+            Create Campaign
+          </Link>
+        </div>
       </div>
 
       {/* Stats Grid */}

@@ -97,6 +97,27 @@ The application is structured into **5 Primary Layout Views**, sharing a common 
 
 ---
 
+### View 0: Brand Profile Onboarding & Identity Gating (`/brand/onboarding`)
+**Layout Pattern:** Distraction-Free Focused Modal/Page Layout (Navigation sidebar is suppressed to maximize form completion focus).
+
+#### Key Components:
+1. **Header & Context:**
+   - Brand OS Welcome Banner with progress pills (`Company Identity` $\rightarrow$ `Scale & Budget` $\rightarrow$ `Primary Contact`).
+   - Clear value proposition highlighting zero-friction local persistence.
+2. **Three-Tier Form Sections:**
+   - **Section 1: Company Identity:** Company name, brand tagline, primary industry dropdown (Gaming, FinTech, D2C, SaaS, AI, Health, Web3), and public website URL.
+   - **Section 2: Scale & Budget:** Organization size picker, target geographic region, default settlement currency (`INR`, `USD`, `EUR`, `GBP`), and monthly influencer marketing budget input.
+   - **Section 3: Primary Marketer Contact:** Marketer's full name and corporate business email.
+3. **Reactive Validation & Submission:**
+   - Real-time client-side error hints preventing empty or invalid submissions.
+   - On completion, writes to `BrandContext` (`localStorage`) and seamlessly routes to `/brand/dashboard`.
+4. **Dynamic Workspace Personalization:**
+   - Injects the active brand identity into the Global Sidebar (custom company initials badge and email).
+   - Injects custom greeting (`Good morning, {companyName}`) and industry tag into the main Brand OS Dashboard.
+   - Provides full profile inspection, editing, and state-resetting tools in `/brand/settings`.
+
+---
+
 ### View 1: Creator Discovery & Intelligence Engine (Upfluence + Qoruz Evolved)
 **Layout Pattern:** Collapsible Faceted Filter Rail (Left) + Visual Responsive Grid (Center) + Slide-Over Creator Intelligence Drawer (Right).
 
