@@ -45,7 +45,24 @@ export function CreatorCard({ creator, onOpenIntelligence, onSendOffer }: Creato
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
               {creator.name}
             </h3>
-            <p className="text-sm text-slate-500">@{creator.slug}</p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-sm text-slate-500">@{creator.slug}</p>
+              {creator.primaryPlatform === 'youtube' && (
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-red-50 text-red-600 border border-red-200">
+                  YouTube
+                </span>
+              )}
+              {creator.primaryPlatform === 'instagram' && (
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-rose-50 text-rose-600 border border-rose-200">
+                  Instagram
+                </span>
+              )}
+              {creator.primaryPlatform === 'twitter' && (
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-sky-50 text-sky-600 border border-sky-200">
+                  X / Twitter
+                </span>
+              )}
+            </div>
           </div>
         </div>
         <StatusBadge state={creator.state} size="sm" />

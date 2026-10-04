@@ -134,6 +134,12 @@ export function IntelligenceDrawer({ creator, isOpen, onClose }: IntelligenceDra
                  <div className="text-xs text-slate-500">Twitch</div>
                </div>
              )}
+             {creator.platforms.twitter && (
+               <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-center">
+                 <div className="text-sm font-bold text-slate-900">{formatCompactNumber(creator.platforms.twitter.followers)}</div>
+                 <div className="text-xs text-slate-500">X / Twitter</div>
+               </div>
+             )}
           </div>
 
           {/* UNCLAIMED CREATOR SPECIFIC VIEW */}

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateCreatorMatchesWithAI } from '@/lib/ai/gemini';
 import { SEED_CREATORS } from '@/lib/seedData';
 import { CampaignBrief } from '@/types/campaign';
+import { Creator } from '@/types/creator';
+import { searchYouTube, normalizeYouTubeData } from '@/lib/integrations/youtube';
+import { searchInstagram, normalizeInstagramData } from '@/lib/integrations/instagram';
+import { searchTwitter, normalizeTwitterData } from '@/lib/integrations/twitter';
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,83 +20,35 @@ export async function POST(request: NextRequest) {
     }
 
     const candidateIds = body.creatorIds as string[] | undefined;
-    let candidates = candidateIds
+    let candidates: Creator[] = candidateIds
       ? SEED_CREATORS.filter((c) => candidateIds.includes(c.id))
       : SEED_CREATORS;
 
-    // Fetch real Indian creators from YouTube if API key is available
-    const apiKey = process.env.YOUTUBE_API_KEY;
-    if (apiKey && process.env.NEXT_PUBLIC_USE_MOCK_FALLBACK !== 'true') {
-      try {
-        const query = brief.targetNiches.length > 0 ? brief.targetNiches[0] : brief.brandIndustry;
-        const searchRes = await fetch(
-          `https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(query)}&regionCode=IN&maxResults=10&order=viewCount&key=${apiKey}`,
-          { cache: 'no-store' }
-        );
-        const searchData = await searchRes.json();
-        
-        if (searchData.items && searchData.items.length > 0) {
-          const channelIds = searchData.items.map((item: any) => item.snippet.channelId).join(',');
-          const statsRes = await fetch(
-            `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${channelIds}&key=${apiKey}`,
-            { cache: 'no-store' }
-          );
-          const statsData = await statsRes.json();
-          
-          if (statsData.items) {
-            candidates = statsData.items.map((item: any) => ({
-              id: `yt-${item.id}`,
-              name: item.snippet.title,
-              slug: item.snippet.customUrl || item.id,
-              avatar: item.snippet.thumbnails?.high?.url || item.snippet.thumbnails?.default?.url || '',
-              bannerImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80',
-              headline: item.snippet.description.substring(0, 80) + '...',
-              state: 'unclaimed',
-              niche: brief.targetNiches,
-              bio: item.snippet.description,
-              wikipediaSlug: undefined,
-              location: 'India',
-              languages: ['English', 'Hindi'],
-              platforms: {
-                youtube: {
-                  channelId: item.id,
-                  handle: item.snippet.customUrl,
-                  subscribers: parseInt(item.statistics.subscriberCount) || 0,
-                  avgViews: Math.floor((parseInt(item.statistics.viewCount) || 0) / (parseInt(item.statistics.videoCount) || 1)),
-                  totalVideos: parseInt(item.statistics.videoCount) || 0,
-                  channelUrl: `https://youtube.com/channel/${item.id}`,
-                }
-              },
-              rates: {
-                dedicatedVideo: Math.floor((parseInt(item.statistics.subscriberCount) || 10000) * 0.05),
-                reelOrShort: Math.floor((parseInt(item.statistics.subscriberCount) || 10000) * 0.02),
-                integratedMention: Math.floor((parseInt(item.statistics.subscriberCount) || 10000) * 0.01),
-              },
-              managerContact: {
-                name: 'Public Management',
-                agency: 'Global Network Route',
-                email: 'contact@example.com',
-                verified: false,
-              },
-              metrics: {
-                avgEngagement: 4.5,
-                onTimeDeliveryRate: 0,
-                totalCompletedDeals: 0,
-              },
-              audience: {
-                topCountries: [{ country: 'India', percentage: 80 }],
-                ageBrackets: [{ bracket: '18-24', percentage: 40 }],
-                genderSplit: { male: 60, female: 40, other: 0 },
-                primaryInterests: [],
-              },
-              verifiedBadges: ['Found via YouTube'],
-              pastBrandCollaborations: [],
-            }));
-          }
-        }
-      } catch (err) {
-        console.error('YouTube search error in matching', err);
-      }
+    const query = brief.targetNiches && brief.targetNiches.length > 0 ? brief.targetNiches[0] : (brief.brandIndustry || 'Tech');
+
+    // Run all 3 searches simultaneously (Takes 2 seconds instead of 6 seconds)
+    const results = await Promise.allSettled([
+      searchYouTube(query),
+      searchInstagram(query),
+      searchTwitter(query)
+    ]);
+
+    // Extract successful results
+    const ytData = results[0].status === 'fulfilled' ? results[0].value : [];
+    const igData = results[1].status === 'fulfilled' ? results[1].value : [];
+    const xData  = results[2].status === 'fulfilled' ? results[2].value : [];
+
+    // Normalize creators across all 3 platforms
+    const ytCandidates = ytData.length > 0 ? normalizeYouTubeData(ytData, brief.targetNiches) : [];
+    const igCandidates = igData.length > 0 ? normalizeInstagramData(igData, brief.targetNiches) : [];
+    const xCandidates  = xData.length > 0 ? normalizeTwitterData(xData, brief.targetNiches) : [];
+
+    // Merge all multi-platform creators into liveCandidates (Gap 1 resolved)
+    const liveCandidates: Creator[] = [...ytCandidates, ...igCandidates, ...xCandidates];
+
+    // If live creators were retrieved across YouTube, Instagram, or Twitter, use them for Gemini evaluation
+    if (liveCandidates.length > 0) {
+      candidates = liveCandidates;
     }
 
     const matches = await generateCreatorMatchesWithAI(brief, candidates);

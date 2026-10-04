@@ -57,6 +57,7 @@ export interface Creator {
   wikipediaSlug?: string;
   location: string;
   languages: string[];
+  primaryPlatform?: 'youtube' | 'instagram' | 'twitter' | 'twitch' | 'github';
   platforms: {
     youtube?: {
       channelId: string;
@@ -76,6 +77,11 @@ export interface Creator {
       handle: string;
       followers: number;
       engagementRate: number;
+      profileUrl: string;
+    };
+    twitter?: {
+      handle: string;
+      followers: number;
       profileUrl: string;
     };
     github?: {
