@@ -1,5 +1,4 @@
 import { CampaignMetricsSnapshot } from '@/types/workspace';
-import { GlassCard } from '../common/GlassCard';
 import { BarChart3, TrendingUp, Users, MousePointerClick, DollarSign } from 'lucide-react';
 
 export function AnalyticsCards({ metrics }: { metrics: CampaignMetricsSnapshot }) {
@@ -10,75 +9,75 @@ export function AnalyticsCards({ metrics }: { metrics: CampaignMetricsSnapshot }
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Reach Card */}
-        <GlassCard className="p-5 flex flex-col justify-between">
+        <div className="saas-card p-5 flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-sm font-medium text-gray-400">Total Views</h4>
-            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+            <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Views</h4>
+            <div className="p-2 bg-blue-50 rounded-lg text-blue-600">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <p className="text-3xl font-bold text-white">{compactNum(metrics.totalViews)}</p>
-            <p className="text-xs text-green-400 mt-1 flex items-center gap-1">
+            <p className="text-3xl font-bold text-slate-900">{compactNum(metrics.totalViews)}</p>
+            <p className="text-xs font-medium text-emerald-600 mt-1 flex items-center gap-1">
               <TrendingUp className="w-3 h-3" /> +12% vs expected
             </p>
           </div>
-        </GlassCard>
+        </div>
 
         {/* Engagement Card */}
-        <GlassCard className="p-5 flex flex-col justify-between">
+        <div className="saas-card p-5 flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-sm font-medium text-gray-400">Engagement</h4>
-            <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400">
+            <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Engagement</h4>
+            <div className="p-2 bg-purple-50 rounded-lg text-purple-600">
               <BarChart3 className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <p className="text-3xl font-bold text-white">{metrics.engagementRate.toFixed(1)}%</p>
-            <p className="text-xs text-gray-500 mt-1">{compactNum(metrics.totalEngagements)} interactions</p>
+            <p className="text-3xl font-bold text-slate-900">{metrics.engagementRate.toFixed(1)}%</p>
+            <p className="text-xs font-medium text-slate-500 mt-1">{compactNum(metrics.totalEngagements)} interactions</p>
           </div>
-        </GlassCard>
+        </div>
 
         {/* Clicks Card */}
-        <GlassCard className="p-5 flex flex-col justify-between">
+        <div className="saas-card p-5 flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-sm font-medium text-gray-400">Link Clicks</h4>
-            <div className="p-2 bg-cyan-500/10 rounded-lg text-cyan-400">
+            <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Link Clicks</h4>
+            <div className="p-2 bg-cyan-50 rounded-lg text-cyan-600">
               <MousePointerClick className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <p className="text-3xl font-bold text-white">{compactNum(metrics.clickThroughs)}</p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-3xl font-bold text-slate-900">{compactNum(metrics.clickThroughs)}</p>
+            <p className="text-xs font-medium text-slate-500 mt-1">
               {((metrics.clickThroughs / metrics.totalViews) * 100).toFixed(1)}% CTR
             </p>
           </div>
-        </GlassCard>
+        </div>
 
         {/* ROI Card */}
-        <GlassCard className="p-5 flex flex-col justify-between">
+        <div className="saas-card p-5 flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-sm font-medium text-gray-400">Est. Value</h4>
-            <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+            <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Est. Value</h4>
+            <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
           <div>
-            <p className="text-3xl font-bold text-white">${compactNum(metrics.revenueGenerated)}</p>
-            <p className="text-xs text-gray-500 mt-1">CPA: ${metrics.effectiveCPA.toFixed(2)}</p>
+            <p className="text-3xl font-bold text-slate-900">${compactNum(metrics.revenueGenerated)}</p>
+            <p className="text-xs font-medium text-slate-500 mt-1">CPA: ${metrics.effectiveCPA.toFixed(2)}</p>
           </div>
-        </GlassCard>
+        </div>
       </div>
 
-      <GlassCard className="p-6">
-        <h3 className="text-xl font-semibold text-white mb-6">Performance Timeline</h3>
-        <div className="h-48 w-full border border-white/5 rounded flex items-center justify-center bg-black/20">
-           <p className="text-gray-500 text-sm flex items-center gap-2">
-             <BarChart3 className="w-4 h-4" />
-             Chart rendering requires historical data (Post-hackathon implementation)
+      <div className="saas-card p-6">
+        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-6">Performance Timeline</h3>
+        <div className="h-64 w-full border border-slate-100 rounded-lg flex items-center justify-center bg-slate-50/50">
+           <p className="text-slate-500 text-sm flex items-center gap-2">
+             <BarChart3 className="w-5 h-5" />
+             Chart rendering requires historical data
            </p>
         </div>
-      </GlassCard>
+      </div>
     </div>
   );
 }

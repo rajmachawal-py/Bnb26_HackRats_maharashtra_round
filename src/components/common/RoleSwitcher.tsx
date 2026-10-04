@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRole, DemoRole } from '@/lib/roleContext';
-import { Building2, Sparkles, UserCheck, Eye, ShieldCheck } from 'lucide-react';
+import { Building2, UserCheck, Eye, ShieldCheck, Cog } from 'lucide-react';
 
 export function RoleSwitcher() {
   const { currentRole, setRole, profile } = useRole();
@@ -17,38 +17,38 @@ export function RoleSwitcher() {
     {
       id: 'brand',
       label: 'Brand Mode',
-      icon: <Building2 size={15} />,
+      icon: <Building2 size={14} />,
       desc: 'TechBrand Inc. (Create Brief & Review)',
       badge: 'Brand OS',
     },
     {
       id: 'creator',
       label: 'Claimed Creator',
-      icon: <UserCheck size={15} />,
+      icon: <UserCheck size={14} />,
       desc: 'Alex Vance (Accept Deal & AI Compliance)',
       badge: 'Creator OS',
     },
     {
       id: 'unclaimed',
       label: 'Unclaimed Profile',
-      icon: <Eye size={15} />,
+      icon: <Eye size={14} />,
       desc: 'Marques B. (Public Wikipedia & Manager Route)',
       badge: 'Cold-Start',
     },
     {
       id: 'verify',
       label: 'Deal Verification',
-      icon: <ShieldCheck size={15} />,
+      icon: <ShieldCheck size={14} />,
       desc: 'DEAL-2026-X89B (Audit & Cryptographic QR)',
       badge: 'Trust Layer',
     },
   ];
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1.5 p-1.5 rounded-full bg-slate-950/85 backdrop-blur-xl border border-violet-500/30 shadow-2xl shadow-violet-950/60 max-w-[96vw] overflow-x-auto">
-      <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 border-r border-white/10 text-xs font-semibold text-violet-300">
-        <Sparkles size={13} className="text-violet-400 animate-spin" style={{ animationDuration: '6s' }} />
-        <span>DEMO DOCK</span>
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 p-1.5 rounded-full bg-white border border-slate-200 shadow-xl max-w-[96vw] overflow-x-auto text-sm">
+      <div className="hidden lg:flex items-center gap-2 px-3 py-1 border-r border-slate-100 text-slate-500 font-semibold uppercase tracking-wider text-xs whitespace-nowrap">
+        <Cog size={14} className="text-primary-500" />
+        <span>Demo Dock</span>
       </div>
 
       <div className="flex items-center gap-1">
@@ -58,20 +58,20 @@ export function RoleSwitcher() {
             <button
               key={r.id}
               onClick={() => setRole(r.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-medium transition-all ${
                 isActive
-                  ? 'bg-gradient-to-r from-violet-600 to-cyan-600 text-white shadow-md shadow-violet-600/40 border border-violet-400/40 scale-105'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
               }`}
               title={r.desc}
             >
-              <span className={isActive ? 'text-white' : 'text-slate-400'}>
+              <span className={isActive ? 'text-slate-300' : 'text-slate-400'}>
                 {r.icon}
               </span>
-              <span className="font-semibold">{r.label}</span>
+              <span className="whitespace-nowrap">{r.label}</span>
               <span
-                className={`hidden md:inline-block text-[10px] px-1.5 py-0.5 rounded-full font-mono ${
-                  isActive ? 'bg-black/30 text-cyan-200' : 'bg-white/5 text-slate-500'
+                className={`hidden md:inline-block whitespace-nowrap text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                  isActive ? 'bg-slate-800 text-primary-300' : 'bg-slate-100 text-slate-400'
                 }`}
               >
                 {r.badge}
@@ -81,9 +81,12 @@ export function RoleSwitcher() {
         })}
       </div>
 
-      <div className="hidden sm:flex items-center gap-2 pl-2 pr-2 border-l border-white/10 text-[11px] text-slate-400">
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-        <span className="font-mono text-slate-300">{profile.name}</span>
+      <div className="hidden sm:flex items-center gap-2 pl-3 pr-4 border-l border-slate-100">
+        <span className="relative flex h-2.5 w-2.5">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        </span>
+        <span className="font-semibold text-slate-700 whitespace-nowrap">{profile.name}</span>
       </div>
     </div>
   );

@@ -12,14 +12,18 @@ const config: Config = {
         background: 'var(--bg-base)',
         surface: 'var(--bg-surface)',
         'surface-elevated': 'var(--bg-surface-elevated)',
+        primary: {
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
+        }
       },
       fontFamily: {
-        display: ['Outfit', 'sans-serif'],
+        display: ['Inter', 'sans-serif'],
         sans: ['Inter', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
-      },
-      backgroundImage: {
-        'accent-gradient': 'linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%)',
       },
     },
   },

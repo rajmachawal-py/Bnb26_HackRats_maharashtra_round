@@ -99,4 +99,5 @@ export interface Creator {
     dealId: string;
     deliverableType: string;
   }>;
+  matchScore?: number;
 }

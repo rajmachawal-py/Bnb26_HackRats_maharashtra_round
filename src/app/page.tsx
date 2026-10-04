@@ -1,393 +1,201 @@
 import React from 'react';
 import Link from 'next/link';
 import { 
-  Sparkles, 
-  ArrowRight, 
-  Compass, 
-  FileText, 
-  ShieldCheck, 
-  CheckCircle2, 
+  Plus, 
+  Megaphone, 
   Users, 
-  Layers, 
-  TrendingUp,
-  Zap,
-  Globe2,
-  FileCheck
+  Wallet,
+  Clock,
+  ArrowRight,
+  MoreHorizontal
 } from 'lucide-react';
-import { SEED_CREATORS, DEMO_CAMPAIGN } from '@/lib/seedData';
+import { SEED_CREATORS } from '@/lib/seedData';
 import { StatusBadge } from '@/components/common/StatusBadge';
-import { GlassCard } from '@/components/common/GlassCard';
+import { formatCompactNumber } from '@/lib/utils';
 
-export default function HomePage() {
-  const claimedCount = SEED_CREATORS.filter(c => c.state === 'claimed').length;
-  const unclaimedCount = SEED_CREATORS.filter(c => c.state === 'unclaimed').length;
+export default function DashboardPage() {
+  const recommendedCreators = SEED_CREATORS.slice(0, 3);
 
   return (
-    <div className="flex flex-col gap-20 py-8">
-      {/* =========================================================================
-          HERO SECTION
-          ========================================================================= */}
-      <section className="page-container flex flex-col items-center text-center pt-10 pb-6 relative">
-        {/* Glowing backdrop spotlight */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-violet-600/15 blur-[120px] rounded-full pointer-events-none -z-10" />
+    <div className="max-w-6xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Good morning, TechBrand</h1>
+          <p className="text-slate-500 mt-1">Here&apos;s what&apos;s happening across your creator partnerships.</p>
+        </div>
+        <Link href="/campaigns/new" className="btn btn-primary">
+          <Plus size={16} />
+          Create Campaign
+        </Link>
+      </div>
 
-        {/* Top Announcement Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-semibold text-violet-300 shadow-lg shadow-violet-950/40 mb-6 animate-float">
-          <Sparkles size={13} className="text-cyan-400" />
-          <span>BNB&apos;26 HACKATHON LIVE PROTOTYPE</span>
-          <span className="w-1 h-1 rounded-full bg-violet-400" />
-          <span className="text-cyan-300 font-mono">$0 FREE-TIER STACK</span>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Active Campaigns', value: '12', icon: <Megaphone size={20} className="text-primary-600" />, trend: '+2 this week' },
+          { label: 'Pending Applications', value: '8', icon: <Clock size={20} className="text-amber-600" />, trend: '3 need review' },
+          { label: 'Active Creators', value: '34', icon: <Users size={20} className="text-emerald-600" />, trend: '+15% from last month' },
+          { label: 'Campaign Spend', value: '₹2.4L', icon: <Wallet size={20} className="text-violet-600" />, trend: 'On budget' },
+        ].map((stat, i) => (
+          <div key={i} className="saas-card p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center">
+                {stat.icon}
+              </div>
+            </div>
+            <h3 className="text-3xl font-bold text-slate-900 mb-1">{stat.value}</h3>
+            <div className="text-sm font-medium text-slate-600 mb-2">{stat.label}</div>
+            <div className="text-xs text-slate-500">{stat.trend}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Active Campaigns Table */}
+        <div className="lg:col-span-2 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold text-slate-900">Active Campaigns</h2>
+            <Link href="/campaigns" className="text-sm font-medium text-primary-600 hover:text-primary-700">
+              View all
+            </Link>
+          </div>
+          
+          <div className="saas-card overflow-hidden">
+            <table className="saas-table">
+              <thead>
+                <tr>
+                  <th>Campaign</th>
+                  <th>Creators</th>
+                  <th>Status</th>
+                  <th>Deadline</th>
+                  <th>Budget</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { name: 'Summer Product Launch', creators: 4, status: 'Active', deadline: '25 Oct 2026', budget: '₹75,000' },
+                  { name: 'CyberFlow Awareness', creators: 12, status: 'Reviewing', deadline: '01 Nov 2026', budget: '₹1.2L' },
+                  { name: 'Developer Tool React', creators: 2, status: 'Planning', deadline: '15 Nov 2026', budget: '₹45,000' },
+                ].map((row, i) => (
+                  <tr key={i} className="hover:bg-slate-50 transition-colors">
+                    <td className="font-medium">{row.name}</td>
+                    <td>
+                      <div className="flex items-center">
+                        <div className="flex -space-x-2">
+                          {[...Array(Math.min(row.creators, 3))].map((_, j) => (
+                            <div key={j} className="w-6 h-6 rounded-full bg-slate-200 border-2 border-white"></div>
+                          ))}
+                        </div>
+                        {row.creators > 3 && <span className="text-xs text-slate-500 ml-2">+{row.creators - 3}</span>}
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                        row.status === 'Active' ? 'bg-emerald-100 text-emerald-800' :
+                        row.status === 'Reviewing' ? 'bg-amber-100 text-amber-800' :
+                        'bg-slate-100 text-slate-800'
+                      }`}>
+                        {row.status}
+                      </span>
+                    </td>
+                    <td className="text-slate-500 text-sm">{row.deadline}</td>
+                    <td className="font-medium text-sm">{row.budget}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold tracking-tight max-w-4xl text-white leading-[1.08] mb-6">
-          The Shared Operating Layer Between <span className="gradient-text">Creators & Brands</span>
-        </h1>
-
-        {/* Subtitle */}
-        <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl font-normal leading-relaxed mb-8">
-          Bridge the fragmented creator economy. Connect discovery, verified legal agreements, 
-          real-time AI brief compliance, and post-campaign retention memory in one unified workspace.
-        </p>
-
-        {/* Action CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3.5 mb-14">
-          <Link href="/discover" className="btn btn-primary btn-lg">
-            <Compass size={18} />
-            <span>Discover Creators</span>
-            <ArrowRight size={16} />
-          </Link>
-          <Link href="/campaigns/new" className="btn btn-glass btn-lg">
-            <Zap size={18} className="text-cyan-400" />
-            <span>Create Campaign Brief</span>
-          </Link>
-          <Link href="/deals/DEAL-2026-X89B" className="btn btn-secondary btn-lg">
-            <FileText size={18} className="text-violet-400" />
-            <span>Open Deal Room</span>
-          </Link>
-        </div>
-
-        {/* Live Metrics Trust Bar */}
-        <div className="w-full max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-900/50 border border-white/10 backdrop-blur-md text-left">
-          <div className="p-3 border-r border-white/5">
-            <div className="text-[11px] uppercase tracking-wider text-slate-400 font-mono">Platform Spend</div>
-            <div className="text-2xl font-display font-bold text-emerald-400">$0 / Free Tier</div>
-            <div className="text-[11px] text-slate-400">Zero mandatory infra cost</div>
-          </div>
-          <div className="p-3 border-r border-white/5">
-            <div className="text-[11px] uppercase tracking-wider text-slate-400 font-mono">Active Ecosystem</div>
-            <div className="text-2xl font-display font-bold text-white">{claimedCount} Claimed + {unclaimedCount} Public</div>
-            <div className="text-[11px] text-slate-400">Solves cold-start dilemma</div>
-          </div>
-          <div className="p-3 border-r border-white/5">
-            <div className="text-[11px] uppercase tracking-wider text-slate-400 font-mono">AI Verification</div>
-            <div className="text-2xl font-display font-bold text-cyan-400">Gemini Flash</div>
-            <div className="text-[11px] text-slate-400">Script compliance & matching</div>
-          </div>
-          <div className="p-3">
-            <div className="text-[11px] uppercase tracking-wider text-slate-400 font-mono">Deal Integrity</div>
-            <div className="text-2xl font-display font-bold text-violet-400">SHA-256 + PDF</div>
-            <div className="text-[11px] text-slate-400">Dual-signed audit verification</div>
+        {/* Recent Activity */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-bold text-slate-900">Recent Activity</h2>
+          <div className="saas-card p-5">
+            <div className="space-y-6">
+              {[
+                { user: 'Sarah Sharma', action: 'submitted content for review', time: '2 hours ago', type: 'content' },
+                { user: 'Summer Launch', action: 'campaign was approved', time: '5 hours ago', type: 'approval' },
+                { user: 'Alex Vance', action: 'signed the contract agreement', time: 'Yesterday', type: 'contract' },
+                { user: 'Marques B.', action: 'viewed your campaign invite', time: 'Yesterday', type: 'view' },
+              ].map((activity, i) => (
+                <div key={i} className="flex gap-4">
+                  <div className="relative mt-1">
+                    <div className="w-2 h-2 rounded-full bg-primary-500 ring-4 ring-primary-50"></div>
+                    {i !== 3 && <div className="absolute top-3 left-1 w-px h-10 bg-slate-200"></div>}
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-900">
+                      <span className="font-semibold">{activity.user}</span> {activity.action}
+                    </p>
+                    <p className="text-xs text-slate-500 mt-0.5">{activity.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="w-full mt-6 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+              View all activity
+            </button>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* =========================================================================
-          THE 14-STEP DEMO QUICK-JUMP MATRIX
-          ========================================================================= */}
-      <section className="page-container">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      {/* Recommended Creators */}
+      <div className="space-y-4 pt-4">
+        <div className="flex items-center justify-between">
           <div>
-            <div className="text-xs font-mono font-semibold uppercase tracking-wider text-violet-400 mb-1">
-              Interactive Hackathon Walkthrough
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-display font-bold text-white">
-              Experience the 4 Core Demo Stages
-            </h2>
+            <h2 className="text-lg font-bold text-slate-900">Recommended for you</h2>
+            <p className="text-sm text-slate-500">Based on your recent Tech & Software campaigns</p>
           </div>
-          <p className="text-xs text-slate-400 max-w-md">
-            Click any module to jump directly into that step of the 14-stage workflow. 
-            Use the floating top dock to toggle between Brand and Creator viewpoints.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1 */}
-          <Link href="/discover" className="block group">
-            <GlassCard className="h-full group-hover:border-violet-500/50 transition-all flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-violet-600/20 text-violet-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Compass size={20} />
-                </div>
-                <div className="text-[11px] font-mono text-violet-400 font-semibold uppercase">Stage 01</div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-violet-300 transition-colors">
-                  Creator Discovery Graph
-                </h3>
-                <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                  Browse claimed small/medium creators alongside established unclaimed profiles (with live Wikipedia data & manager routing).
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-violet-400 group-hover:translate-x-1 transition-transform">
-                <span>Open Discovery</span>
-                <ArrowRight size={14} />
-              </div>
-            </GlassCard>
-          </Link>
-
-          {/* Card 2 */}
-          <Link href="/campaigns/new" className="block group">
-            <GlassCard className="h-full group-hover:border-cyan-500/50 transition-all flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-cyan-600/20 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Sparkles size={20} />
-                </div>
-                <div className="text-[11px] font-mono text-cyan-400 font-semibold uppercase">Stage 02</div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
-                  Brief Builder & AI Match
-                </h3>
-                <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                  Input structured brief requirements and watch Gemini AI explain why creators fit with explainable rationale.
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform">
-                <span>Build Campaign</span>
-                <ArrowRight size={14} />
-              </div>
-            </GlassCard>
-          </Link>
-
-          {/* Card 3 */}
-          <Link href="/deals/DEAL-2026-X89B" className="block group">
-            <GlassCard className="h-full group-hover:border-emerald-500/50 transition-all flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <ShieldCheck size={20} />
-                </div>
-                <div className="text-[11px] font-mono text-emerald-400 font-semibold uppercase">Stage 03</div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors">
-                  Deal Room & PDF Contract
-                </h3>
-                <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                  Simulate commercial counter-offers, execute dual confirmation, and download client-generated contract PDFs with Deal IDs.
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400 group-hover:translate-x-1 transition-transform">
-                <span>View Deal Room</span>
-                <ArrowRight size={14} />
-              </div>
-            </GlassCard>
-          </Link>
-
-          {/* Card 4 */}
-          <Link href="/campaigns/cyberflow/workspace" className="block group">
-            <GlassCard className="h-full group-hover:border-amber-500/50 transition-all flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-amber-600/20 text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <FileCheck size={20} />
-                </div>
-                <div className="text-[11px] font-mono text-amber-400 font-semibold uppercase">Stage 04</div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-300 transition-colors">
-                  AI Compliance & Analytics
-                </h3>
-                <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                  Test draft scripts against brief requirements. Catch missing codes, approve deliverables, and log post-campaign ROI metrics.
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-400 group-hover:translate-x-1 transition-transform">
-                <span>Open Workspace</span>
-                <ArrowRight size={14} />
-              </div>
-            </GlassCard>
+          <Link href="/discover" className="btn btn-secondary btn-sm">
+            Discover more <ArrowRight size={14} />
           </Link>
         </div>
-      </section>
 
-      {/* =========================================================================
-          THE 3 CORE PILLARS (DISCOVER, COLLABORATE, GROW)
-          ========================================================================= */}
-      <section className="page-container">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="text-xs font-mono font-semibold uppercase tracking-wider text-cyan-400 mb-1">
-            System Architecture
-          </div>
-          <h2 className="text-3xl font-display font-bold text-white mb-3">
-            Three Connected Operating Jobs
-          </h2>
-          <p className="text-sm text-slate-400">
-            A single continuous business loop that keeps relationship context alive across campaigns.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Pillar 1 */}
-          <div className="p-6 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white mb-5 shadow-lg shadow-violet-600/30">
-              <Compass size={24} />
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">1. Discover & Match</h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-4">
-              Indexes small creators looking for deals alongside established tier-1 creators via legitimate public sources. No cold-start gatekeeping.
-            </p>
-            <ul className="flex flex-col gap-2 text-xs text-slate-300">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0" />
-                <span>Multi-signal matching beyond follower vanity</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0" />
-                <span>Explainable AI recommendations with caveats</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0" />
-                <span>Verified agency & manager routing routes</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Pillar 2 */}
-          <div className="p-6 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-600 to-teal-600 flex items-center justify-center text-white mb-5 shadow-lg shadow-cyan-600/30">
-              <ShieldCheck size={24} />
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">2. Collaborate & Verify</h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-4">
-              Structured negotiation eliminates undocumented DM promises. Dual confirmation generates an immutable Deal ID and downloadable PDF contract.
-            </p>
-            <ul className="flex flex-col gap-2 text-xs text-slate-300">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-cyan-400 flex-shrink-0" />
-                <span>Structured terms: deliverables, usage rights, fees</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-cyan-400 flex-shrink-0" />
-                <span>Branded PDF agreement with dual timestamps</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-cyan-400 flex-shrink-0" />
-                <span>AI compliance checking for scripts and CTAs</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Pillar 3 */}
-          <div className="p-6 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-fuchsia-600 to-pink-600 flex items-center justify-center text-white mb-5 shadow-lg shadow-fuchsia-600/30">
-              <TrendingUp size={24} />
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">3. Grow & Retain</h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-4">
-              Campaign outcomes do not vanish into emails. Performance metrics are attached to the creator portfolio and brand history for seamless re-booking.
-            </p>
-            <ul className="flex flex-col gap-2 text-xs text-slate-300">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-fuchsia-400 flex-shrink-0" />
-                <span>Post-campaign ROI & conversion tracking</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-fuchsia-400 flex-shrink-0" />
-                <span>Creator portfolio enriched with verified deals</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 size={14} className="text-fuchsia-400 flex-shrink-0" />
-                <span>Dual learning loops for creators and brands</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          THE 4-STATE CREATOR LIFECYCLE SPOTLIGHT
-          ========================================================================= */}
-      <section className="page-container">
-        <div className="p-8 rounded-3xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-violet-500/20 backdrop-blur-xl relative overflow-hidden">
-          <div className="max-w-2xl mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/20 text-violet-300 text-xs font-mono font-semibold mb-3">
-              <Globe2 size={12} />
-              <span>COLD-START SOLVER</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-3">
-              The 4-State Creator Discovery Model
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Why don&apos;t marketplaces work? Established creators refuse to create yet another profile. 
-              Our acquisition principle: <strong className="text-white">Make creators visible first through public data, then give them a concrete reason (an incoming deal) to claim their profile.</strong>
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-white/5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-slate-400">01</span>
-                <StatusBadge label="Discoverable" variant="neutral" size="sm" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {recommendedCreators.map((creator) => (
+            <div key={creator.id} className="saas-card p-5 flex flex-col">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={creator.avatar} alt={creator.name} className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <h4 className="font-bold text-slate-900">{creator.name}</h4>
+                    <p className="text-xs text-slate-500">@{creator.slug}</p>
+                  </div>
+                </div>
+                <button className="text-slate-400 hover:text-slate-600"><MoreHorizontal size={16} /></button>
               </div>
-              <h4 className="text-sm font-bold text-white mb-1">Public Presence</h4>
-              <p className="text-[11px] text-slate-400">
-                Indexed from legitimate public sources like Wikipedia and YouTube stats. No account required.
-              </p>
-            </div>
 
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-amber-500/20">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-amber-400">02</span>
-                <StatusBadge state="unclaimed" size="sm" />
+              <div className="text-xs text-slate-600 mb-4 font-medium px-2 py-1 bg-slate-100 rounded-md self-start">
+                {creator.niche.join(' • ')}
               </div>
-              <h4 className="text-sm font-bold text-white mb-1">Unclaimed Profile</h4>
-              <p className="text-[11px] text-slate-400">
-                Brands can see public signals and reach out via listed talent manager / agency email.
-              </p>
-            </div>
 
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-emerald-500/20">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-emerald-400">03</span>
-                <StatusBadge state="claimed" size="sm" />
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Followers</div>
+                  <div className="font-semibold text-slate-900">
+                    {formatCompactNumber(Object.values(creator.platforms).reduce((acc, platform: any) => acc + (platform?.followers || platform?.subscribers || 0), 0))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Engagement</div>
+                  <div className="font-semibold text-slate-900">{creator.metrics.avgEngagement}%</div>
+                </div>
               </div>
-              <h4 className="text-sm font-bold text-white mb-1">Claimed Creator</h4>
-              <p className="text-[11px] text-slate-400">
-                Creator claims ownership to manage rates, view direct offers, and negotiate contracts.
-              </p>
-            </div>
 
-            <div className="p-4 rounded-xl bg-slate-950/60 border border-cyan-500/20">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-cyan-400">04</span>
-                <StatusBadge state="active" size="sm" />
+              <div className="mt-auto flex gap-2">
+                <Link href={`/discover/${creator.id}`} className="btn btn-secondary flex-1">
+                  View Profile
+                </Link>
+                <button className="btn btn-primary flex-1">
+                  Invite
+                </button>
               </div>
-              <h4 className="text-sm font-bold text-white mb-1">Active Deal</h4>
-              <p className="text-[11px] text-slate-400">
-                Executing campaigns with real-time AI compliance check, verified delivery, and analytics.
-              </p>
             </div>
-          </div>
+          ))}
         </div>
-      </section>
-
-      {/* =========================================================================
-          LIVE DEMO CTA BAR
-          ========================================================================= */}
-      <section className="page-container text-center py-6">
-        <div className="p-8 rounded-2xl bg-gradient-to-r from-violet-950/60 via-slate-900/60 to-cyan-950/60 border border-white/10 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-left">
-            <h3 className="text-xl font-display font-bold text-white mb-1">
-              Ready to verify the 14-step prototype?
-            </h3>
-            <p className="text-xs text-slate-400">
-              Begin with Creator Discovery or jump straight into the CyberFlow campaign brief.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/discover" className="btn btn-primary">
-              <Compass size={16} />
-              <span>Launch Creator Discovery</span>
-            </Link>
-            <Link href="/deals/verify/DEAL-2026-X89B" className="btn btn-secondary">
-              <ShieldCheck size={16} />
-              <span>Verify Deal Audit</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 }

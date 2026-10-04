@@ -93,7 +93,7 @@ OUTPUT FORMAT: Strict raw JSON only. Do not wrap in markdown or backticks.`;
 function generateDeterministicCompliance(scriptText: string, points: string[], code: string): ComplianceEvaluation {
   const lowerScript = scriptText.toLowerCase();
   
-  const hasCode = code && lowerScript.includes(code.toLowerCase());
+  const hasCode = Boolean(code && lowerScript.includes(code.toLowerCase()));
   const words = scriptText.split(/\s+/).length;
   const estimatedSeconds = Math.round((words / 130) * 60);
   

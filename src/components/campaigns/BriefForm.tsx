@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { CampaignBrief, DeliverableFormat } from '@/types/campaign';
-import { DEMO_CAMPAIGN } from '@/lib/seedData';
-import { Sparkles, Building2, Target, DollarSign, FileCheck, Layers } from 'lucide-react';
+import { Sparkles, Building2, Target, DollarSign, FileCheck, Info } from 'lucide-react';
 
 interface BriefFormProps {
   onSubmit: (brief: CampaignBrief) => void;
@@ -121,23 +120,25 @@ export function BriefForm({ onSubmit, isLoading }: BriefFormProps) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       {/* AI Autofill Banner */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-violet-950/70 via-slate-900/80 to-cyan-950/70 border border-violet-500/30 flex flex-col gap-3 shadow-lg shadow-violet-900/20">
-        <div className="flex items-center gap-2.5">
-          <Sparkles size={18} className="text-cyan-400 flex-shrink-0" />
-          <div className="text-xs">
-            <span className="font-bold text-white block">AI Campaign Autofill</span>
-            <span className="text-slate-400">
+      <div className="saas-card p-5 bg-gradient-to-br from-primary-50 to-white border-primary-100 flex flex-col gap-4">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center shrink-0">
+            <Sparkles size={16} />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900">AI Campaign Autofill</h3>
+            <p className="text-sm text-slate-500 mt-1">
               Describe your idea in one sentence and let AI generate the entire structured brief.
-            </span>
+            </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <input
             type="text"
             value={ideaInput}
             onChange={(e) => setIdeaInput(e.target.value)}
             placeholder="e.g. A campaign for a new fitness app targeting Indian college students"
-            className="input-field text-xs flex-1 border-violet-500/30 focus:border-cyan-400"
+            className="input-field flex-1"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
@@ -149,269 +150,238 @@ export function BriefForm({ onSubmit, isLoading }: BriefFormProps) {
             type="button"
             onClick={handleAIGenerate}
             disabled={isGeneratingBrief || !ideaInput.trim()}
-            className="btn btn-primary btn-sm flex-shrink-0 whitespace-nowrap"
+            className="btn btn-secondary shrink-0"
           >
-            {isGeneratingBrief ? (
-              <div className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-            ) : (
-              <Sparkles size={13} />
-            )}
-            <span>{isGeneratingBrief ? 'Generating...' : 'Auto-Fill'}</span>
+            {isGeneratingBrief ? 'Generating...' : 'Auto-Fill'}
           </button>
         </div>
       </div>
 
-      {/* SECTION 1: Brand & Product Profile */}
-      <div className="p-5 rounded-2xl bg-slate-900/60 border border-white/10 flex flex-col gap-4">
-        <div className="flex items-center gap-2 text-xs font-bold font-mono text-cyan-400 uppercase tracking-wider">
-          <Building2 size={15} />
-          <span>1. Brand & Product Identity</span>
+      <div className="saas-card overflow-hidden">
+        {/* SECTION 1 */}
+        <div className="p-6 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
+            <Building2 size={16} className="text-slate-400" />
+            1. Brand & Product Identity
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Brand / Company Name *</label>
+              <input
+                type="text"
+                required
+                value={brief.brandName}
+                onChange={(e) => setBrief({ ...brief, brandName: e.target.value })}
+                className="input-field"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Product Name *</label>
+              <input
+                type="text"
+                required
+                value={brief.productName}
+                onChange={(e) => setBrief({ ...brief, productName: e.target.value })}
+                className="input-field"
+              />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-slate-700">Product Overview *</label>
+            <textarea
+              required
+              rows={3}
+              value={brief.productDescription}
+              onChange={(e) => setBrief({ ...brief, productDescription: e.target.value })}
+              className="textarea-field"
+            />
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Brand / Company Name *</label>
+        {/* SECTION 2 */}
+        <div className="p-6 border-b border-slate-200 bg-slate-50/50">
+          <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
+            <Target size={16} className="text-slate-400" />
+            2. Campaign Objective
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Campaign Title *</label>
+              <input
+                type="text"
+                required
+                value={brief.campaignTitle}
+                onChange={(e) => setBrief({ ...brief, campaignTitle: e.target.value })}
+                className="input-field"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Primary Objective</label>
+              <select
+                value={brief.campaignObjective}
+                onChange={(e) => setBrief({ ...brief, campaignObjective: e.target.value as any })}
+                className="select-field"
+              >
+                <option value="Developer Signups">Developer Signups & Trials</option>
+                <option value="Product Launch">Product Launch & Awareness</option>
+                <option value="Brand Awareness">Brand Awareness & Credibility</option>
+                <option value="Conversions & Sales">Direct Conversions & Sales</option>
+              </select>
+            </div>
+          </div>
+          <div className="space-y-1.5 mb-5">
+            <label className="text-sm font-medium text-slate-700">Target Audience *</label>
             <input
               type="text"
               required
-              placeholder="e.g. TechBrand Inc."
-              value={brief.brandName}
-              onChange={(e) => setBrief({ ...brief, brandName: e.target.value })}
-              className="input-field text-xs"
+              value={brief.targetAudience}
+              onChange={(e) => setBrief({ ...brief, targetAudience: e.target.value })}
+              className="input-field"
             />
           </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Product or Service Name *</label>
-            <input
-              type="text"
-              required
-              placeholder="e.g. CyberFlow AI"
-              value={brief.productName}
-              onChange={(e) => setBrief({ ...brief, productName: e.target.value })}
-              className="input-field text-xs"
-            />
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700">Target Niches</label>
+            <div className="flex flex-wrap gap-2">
+              {AVAILABLE_NICHES.map((n) => {
+                const isSelected = brief.targetNiches.includes(n);
+                return (
+                  <button
+                    type="button"
+                    key={n}
+                    onClick={() => handleToggleNiche(n)}
+                    className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
+                      isSelected
+                        ? 'bg-primary-600 border-primary-600 text-white font-medium'
+                        : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
+                    }`}
+                  >
+                    {n}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-300">Product Overview *</label>
-          <textarea
-            required
-            rows={2}
-            placeholder="Describe what the product does and why engineers/consumers love it..."
-            value={brief.productDescription}
-            onChange={(e) => setBrief({ ...brief, productDescription: e.target.value })}
-            className="textarea-field text-xs"
-          />
-        </div>
-      </div>
-
-      {/* SECTION 2: Campaign Objective & Niches */}
-      <div className="p-5 rounded-2xl bg-slate-900/60 border border-white/10 flex flex-col gap-4">
-        <div className="flex items-center gap-2 text-xs font-bold font-mono text-violet-400 uppercase tracking-wider">
-          <Target size={15} />
-          <span>2. Campaign Objective & Target Niches</span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Campaign Title *</label>
-            <input
-              type="text"
-              required
-              placeholder="e.g. CyberFlow Pro Launch Q4"
-              value={brief.campaignTitle}
-              onChange={(e) => setBrief({ ...brief, campaignTitle: e.target.value })}
-              className="input-field text-xs"
-            />
+        {/* SECTION 3 */}
+        <div className="p-6 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
+            <DollarSign size={16} className="text-slate-400" />
+            3. Commercials
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Budget Per Creator ($)</label>
+              <input
+                type="number"
+                min={500}
+                step={100}
+                value={brief.budgetPerCreator}
+                onChange={(e) => setBrief({ ...brief, budgetPerCreator: parseFloat(e.target.value) || 0 })}
+                className="input-field font-mono"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Deadline</label>
+              <input
+                type="date"
+                value={brief.targetDeadline}
+                onChange={(e) => setBrief({ ...brief, targetDeadline: e.target.value })}
+                className="input-field"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Max Revisions</label>
+              <input
+                type="number"
+                min={1}
+                max={5}
+                value={brief.maxRevisionRounds}
+                onChange={(e) => setBrief({ ...brief, maxRevisionRounds: parseInt(e.target.value, 10) || 1 })}
+                className="input-field font-mono"
+              />
+            </div>
           </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Primary Objective</label>
-            <select
-              value={brief.campaignObjective}
-              onChange={(e) =>
-                setBrief({
-                  ...brief,
-                  campaignObjective: e.target.value as CampaignBrief['campaignObjective'],
-                })
-              }
-              className="input-field text-xs bg-slate-950"
-            >
-              <option value="Developer Signups">Developer Signups & Trials</option>
-              <option value="Product Launch">Product Launch & Awareness</option>
-              <option value="Brand Awareness">Brand Awareness & Credibility</option>
-              <option value="Conversions & Sales">Direct Conversions & Sales</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-300">Target Audience Description *</label>
-          <input
-            type="text"
-            required
-            placeholder="e.g. Senior Software Engineers, Full-Stack Developers, AI Practitioners"
-            value={brief.targetAudience}
-            onChange={(e) => setBrief({ ...brief, targetAudience: e.target.value })}
-            className="input-field text-xs"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-slate-300">Target Content Niches</label>
-          <div className="flex flex-wrap gap-2">
-            {AVAILABLE_NICHES.map((n) => {
-              const isSelected = brief.targetNiches.includes(n);
-              return (
-                <button
-                  type="button"
-                  key={n}
-                  onClick={() => handleToggleNiche(n)}
-                  className={`text-xs px-3 py-1.5 rounded-lg transition-all ${
-                    isSelected
-                      ? 'bg-violet-600/30 border border-violet-500/50 text-white font-semibold'
-                      : 'bg-slate-950/60 border border-white/5 text-slate-400 hover:text-white'
-                  }`}
-                >
-                  {n}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 3: Commercials & Deliverables */}
-      <div className="p-5 rounded-2xl bg-slate-900/60 border border-white/10 flex flex-col gap-4">
-        <div className="flex items-center gap-2 text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider">
-          <DollarSign size={15} />
-          <span>3. Commercials & Deliverable Specs</span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Budget Per Creator ($)</label>
-            <input
-              type="number"
-              min={500}
-              step={100}
-              value={brief.budgetPerCreator}
-              onChange={(e) =>
-                setBrief({ ...brief, budgetPerCreator: parseFloat(e.target.value) || 0 })
-              }
-              className="input-field text-xs font-mono font-bold text-emerald-400"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Target Publishing Deadline</label>
-            <input
-              type="date"
-              value={brief.targetDeadline}
-              onChange={(e) => setBrief({ ...brief, targetDeadline: e.target.value })}
-              className="input-field text-xs font-mono"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Max Free Revisions</label>
-            <input
-              type="number"
-              min={1}
-              max={5}
-              value={brief.maxRevisionRounds}
-              onChange={(e) =>
-                setBrief({ ...brief, maxRevisionRounds: parseInt(e.target.value, 10) || 1 })
-              }
-              className="input-field text-xs font-mono"
-            />
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700">Deliverables</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {AVAILABLE_DELIVERABLES.map((d) => {
+                const isChecked = brief.deliverablesRequired.includes(d);
+                return (
+                  <button
+                    type="button"
+                    key={d}
+                    onClick={() => handleToggleDeliverable(d)}
+                    className={`p-3 rounded-lg text-sm text-left border flex items-center justify-between transition-all ${
+                      isChecked
+                        ? 'bg-primary-50 border-primary-200 text-primary-900 font-medium'
+                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span>{d}</span>
+                    {isChecked && <div className="w-4 h-4 rounded-full bg-primary-600 flex items-center justify-center"><div className="w-1.5 h-1.5 rounded-full bg-white"></div></div>}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-xs font-semibold text-slate-300">Required Deliverable Formats</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {AVAILABLE_DELIVERABLES.map((d) => {
-              const isChecked = brief.deliverablesRequired.includes(d);
-              return (
-                <button
-                  type="button"
-                  key={d}
-                  onClick={() => handleToggleDeliverable(d)}
-                  className={`p-2.5 rounded-xl text-xs text-left border flex items-center justify-between transition-all ${
-                    isChecked
-                      ? 'bg-cyan-500/20 border-cyan-500/50 text-white font-semibold'
-                      : 'bg-slate-950/60 border-white/5 text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <span>{d}</span>
-                  {isChecked && <span className="text-cyan-400 font-bold">✓</span>}
-                </button>
-              );
-            })}
+        {/* SECTION 4 */}
+        <div className="p-6 bg-slate-50/50">
+          <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
+            <FileCheck size={16} className="text-slate-400" />
+            4. Compliance
+          </h3>
+          <div className="space-y-3 mb-6">
+            <label className="text-sm font-medium text-slate-700">
+              Mandatory Talking Points (Checked by AI Auditor)
+            </label>
+            {brief.mandatoryTalkingPoints.map((tp, idx) => (
+              <input
+                key={idx}
+                type="text"
+                value={tp}
+                onChange={(e) => handleTalkingPointChange(idx, e.target.value)}
+                className="input-field"
+                placeholder={`Talking point #${idx + 1}`}
+              />
+            ))}
           </div>
-        </div>
-      </div>
-
-      {/* SECTION 4: Creative Guidelines & Compliance Rules */}
-      <div className="p-5 rounded-2xl bg-slate-900/60 border border-white/10 flex flex-col gap-4">
-        <div className="flex items-center gap-2 text-xs font-bold font-mono text-amber-400 uppercase tracking-wider">
-          <FileCheck size={15} />
-          <span>4. Creative Guidelines & Mandatory Compliance Rules</span>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="text-xs font-semibold text-slate-300">
-            Mandatory Talking Points (Checked by AI Auditor)
-          </label>
-          {brief.mandatoryTalkingPoints.map((tp, idx) => (
-            <input
-              key={idx}
-              type="text"
-              value={tp}
-              onChange={(e) => handleTalkingPointChange(idx, e.target.value)}
-              className="input-field text-xs"
-              placeholder={`Talking point #${idx + 1}`}
-            />
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Mandatory Call to Action (CTA)</label>
-            <input
-              type="text"
-              required
-              value={brief.mandatoryCTA}
-              onChange={(e) => setBrief({ ...brief, mandatoryCTA: e.target.value })}
-              className="input-field text-xs"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-300">Promo / Discount Code</label>
-            <input
-              type="text"
-              required
-              value={brief.discountCode}
-              onChange={(e) => setBrief({ ...brief, discountCode: e.target.value })}
-              className="input-field text-xs font-mono font-bold text-cyan-300"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Mandatory CTA</label>
+              <input
+                type="text"
+                required
+                value={brief.mandatoryCTA}
+                onChange={(e) => setBrief({ ...brief, mandatoryCTA: e.target.value })}
+                className="input-field"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-slate-700">Promo Code</label>
+              <input
+                type="text"
+                required
+                value={brief.discountCode}
+                onChange={(e) => setBrief({ ...brief, discountCode: e.target.value })}
+                className="input-field font-mono"
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Submit CTA */}
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="btn btn-primary py-3.5 text-sm font-bold flex items-center justify-center gap-2 shadow-xl shadow-violet-600/30"
-      >
-        <Sparkles size={16} className={isLoading ? 'animate-spin' : ''} />
-        <span>{isLoading ? 'Running Gemini AI Creator Matching...' : 'Run AI Creator Matching'}</span>
-      </button>
+      <div className="flex justify-end pt-2">
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="btn btn-primary btn-lg min-w-[200px]"
+        >
+          {isLoading ? 'Processing...' : 'Run AI Creator Matching'}
+        </button>
+      </div>
     </form>
   );
 }

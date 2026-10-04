@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { ComplianceEvaluation } from '@/types/workspace';
 import { DEMO_SCRIPTS, DEMO_CAMPAIGN } from '@/lib/seedData';
-import { GlassCard } from '../common/GlassCard';
 import { CheckCircle2, AlertTriangle, AlertCircle, Loader2, Play } from 'lucide-react';
 
 export function ComplianceChecker() {
@@ -33,99 +32,107 @@ export function ComplianceChecker() {
 
   return (
     <div className="space-y-6">
-      <GlassCard>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold text-white">Script Draft</h3>
+      <div className="saas-card overflow-hidden">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-slate-100 bg-slate-50/50">
+          <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3 sm:mb-0">Script Draft</h3>
           <div className="flex gap-2">
             <button 
               onClick={() => setScript(DEMO_SCRIPTS.erroneousScript)}
-              className="px-3 py-1 text-xs rounded bg-white/5 hover:bg-white/10 text-gray-300 transition-colors"
+              className="px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
             >
               Load Demo (Errors)
             </button>
             <button 
               onClick={() => setScript(DEMO_SCRIPTS.compliantScript)}
-              className="px-3 py-1 text-xs rounded bg-white/5 hover:bg-white/10 text-gray-300 transition-colors"
+              className="px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
             >
               Load Demo (Compliant)
             </button>
           </div>
         </div>
 
-        <textarea
-          value={script}
-          onChange={(e) => setScript(e.target.value)}
-          className="w-full h-48 bg-black/40 border border-white/10 rounded-xl p-4 text-gray-300 focus:outline-none focus:border-purple-500/50 transition-colors resize-none mb-4"
-          placeholder="Paste your video script here..."
-        />
+        <div className="p-6">
+          <textarea
+            value={script}
+            onChange={(e) => setScript(e.target.value)}
+            className="textarea-field w-full h-64 mb-4 font-mono text-sm leading-relaxed"
+            placeholder="Paste your video script here..."
+          />
 
-        <div className="flex justify-end">
-          <button
-            onClick={handleCheck}
-            disabled={isChecking || !script}
-            className="btn-primary flex items-center gap-2"
-          >
-            {isChecking ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-            Run AI Auditor
-          </button>
+          <div className="flex justify-end">
+            <button
+              onClick={handleCheck}
+              disabled={isChecking || !script}
+              className="btn btn-primary"
+            >
+              {isChecking ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
+              <span>Run AI Auditor</span>
+            </button>
+          </div>
         </div>
-      </GlassCard>
+      </div>
 
       {result && (
-        <GlassCard glow={result.overallPassed ? 'cyan' : 'purple'} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center gap-4 mb-6 pb-6 border-b border-white/10">
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center \${result.overallPassed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-              {result.overallPassed ? <CheckCircle2 className="w-6 h-6" /> : <AlertTriangle className="w-6 h-6" />}
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-white">
-                {result.overallPassed ? 'Ready for Production' : 'Revisions Required'}
-              </h3>
-              <p className="text-sm text-gray-400">{result.summaryFeedback}</p>
-            </div>
-            <div className="ml-auto text-right">
-              <p className="text-3xl font-bold text-white">{result.score}<span className="text-lg text-gray-500">/100</span></p>
-              <p className="text-xs text-gray-500">Confidence Score</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {result.flags.map((flag) => (
-              <div 
-                key={flag.id} 
-                className={`flex gap-4 p-4 rounded-xl border \${
-                  flag.type === 'pass' ? 'bg-green-500/5 border-green-500/20' : 
-                  flag.type === 'warning' ? 'bg-yellow-500/5 border-yellow-500/20' : 
-                  'bg-red-500/5 border-red-500/20'
-                }`}
-              >
-                {flag.type === 'pass' ? <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0" /> : 
-                 flag.type === 'warning' ? <AlertCircle className="w-5 h-5 text-yellow-400 shrink-0" /> : 
-                 <AlertTriangle className="w-5 h-5 text-red-400 shrink-0" />}
-                
-                <div>
-                  <p className="font-medium text-white mb-1">{flag.title}</p>
-                  <p className="text-sm text-gray-400">{flag.description}</p>
-                </div>
+        <div className={`saas-card overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 border-t-4 ${result.overallPassed ? 'border-t-emerald-500' : 'border-t-red-500'}`}>
+          <div className="p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 pb-6 border-b border-slate-100">
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center shrink-0 ${result.overallPassed ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                {result.overallPassed ? <CheckCircle2 className="w-7 h-7" /> : <AlertTriangle className="w-7 h-7" />}
               </div>
-            ))}
-          </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-slate-900 mb-1">
+                  {result.overallPassed ? 'Ready for Production' : 'Revisions Required'}
+                </h3>
+                <p className="text-sm text-slate-600">{result.summaryFeedback}</p>
+              </div>
+              <div className="text-right">
+                <div className="flex items-baseline justify-end gap-1">
+                   <p className="text-4xl font-bold text-slate-900 tracking-tighter">{result.score}</p>
+                   <p className="text-lg font-medium text-slate-400">/100</p>
+                </div>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">Confidence</p>
+              </div>
+            </div>
 
-          <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-xs text-gray-500 mb-1">Estimated Length</p>
-              <p className="text-sm font-medium text-white">~{Math.floor(result.estimatedDurationSeconds / 60)}m {result.estimatedDurationSeconds % 60}s</p>
+            <div className="space-y-3">
+              {result.flags.map((flag) => (
+                <div 
+                  key={flag.id} 
+                  className={`flex gap-4 p-4 rounded-xl border ${
+                    flag.type === 'pass' ? 'bg-emerald-50/50 border-emerald-100' : 
+                    flag.type === 'warning' ? 'bg-amber-50/50 border-amber-100' : 
+                    'bg-red-50/50 border-red-100'
+                  }`}
+                >
+                  <div className="shrink-0 mt-0.5">
+                    {flag.type === 'pass' ? <CheckCircle2 className="w-5 h-5 text-emerald-500" /> : 
+                     flag.type === 'warning' ? <AlertCircle className="w-5 h-5 text-amber-500" /> : 
+                     <AlertTriangle className="w-5 h-5 text-red-500" />}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900 mb-0.5 text-sm">{flag.title}</p>
+                    <p className="text-sm text-slate-600 leading-relaxed">{flag.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div>
-              <p className="text-xs text-gray-500 mb-1">Promo Code</p>
-              <p className="text-sm font-medium text-white">{result.promoCodeDetected ? 'Detected' : 'Missing'}</p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-500 mb-1">CTA Type</p>
-              <p className="text-sm font-medium text-white">{result.ctaDetected ? 'Link in Bio/Desc' : 'None'}</p>
+
+            <div className="mt-6 pt-6 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+              <div className="p-4 bg-slate-50 rounded-lg">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Est. Length</p>
+                <p className="text-lg font-bold text-slate-900">~{Math.floor(result.estimatedDurationSeconds / 60)}m {result.estimatedDurationSeconds % 60}s</p>
+              </div>
+              <div className="p-4 bg-slate-50 rounded-lg">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Promo Code</p>
+                <p className="text-lg font-bold text-slate-900">{result.promoCodeDetected ? 'Detected' : 'Missing'}</p>
+              </div>
+              <div className="p-4 bg-slate-50 rounded-lg">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">CTA Type</p>
+                <p className="text-lg font-bold text-slate-900">{result.ctaDetected ? 'Link in Desc' : 'None'}</p>
+              </div>
             </div>
           </div>
-        </GlassCard>
+        </div>
       )}
     </div>
   );

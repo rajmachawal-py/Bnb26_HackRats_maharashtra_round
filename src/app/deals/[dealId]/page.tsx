@@ -1,7 +1,6 @@
 import { DEMO_DEAL } from '@/lib/seedData';
 import { NegotiationTerms } from '@/components/deals/NegotiationTerms';
-import { GlassCard } from '@/components/common/GlassCard';
-import { CheckCircle, AlertTriangle, Activity } from 'lucide-react';
+import { Activity } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -21,51 +20,51 @@ export default async function DealPage({ params }: DealPageProps) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Deal Room: {deal.id}</h1>
-          <p className="text-gray-400">
-            Between <span className="text-white font-medium">{deal.brandName}</span> and <span className="text-white font-medium">{deal.creatorName}</span>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight mb-1">Deal Room: {deal.id}</h1>
+          <p className="text-sm text-slate-500">
+            Between <span className="text-slate-900 font-semibold">{deal.brandName}</span> and <span className="text-slate-900 font-semibold">{deal.creatorName}</span>
           </p>
         </div>
         
         <Link 
           href={`/deals/verify/${deal.id}`}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/20 transition-colors"
+          className="btn btn-secondary bg-slate-50 border-slate-200 text-slate-700"
         >
-          <Activity className="w-4 h-4" />
-          <span className="text-sm font-medium">View Public Ledger Audit</span>
+          <Activity className="w-4 h-4 text-primary-500" />
+          <span>View Public Ledger Audit</span>
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
         {/* Left Column: Terms & Negotiation (2/3 width) */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="xl:col-span-2 space-y-6">
           <NegotiationTerms deal={deal} />
         </div>
 
         {/* Right Column: Audit Log (1/3 width) */}
-        <div className="space-y-6">
-          <GlassCard className="h-full">
-            <h3 className="text-xl font-semibold text-white mb-6">Audit Log</h3>
-            <div className="relative border-l border-white/10 ml-3 space-y-6">
-              {deal.history.map((event, index) => (
+        <div className="xl:col-span-1 space-y-6 sticky top-24">
+          <div className="saas-card p-6">
+            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-6">Audit Log</h3>
+            <div className="relative border-l border-slate-200 ml-2 space-y-6">
+              {deal.history.map((event) => (
                 <div key={event.id} className="relative pl-6">
                   {/* Timeline Dot */}
-                  <div className="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-purple-500 border-2 border-gray-900" />
+                  <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary-500 ring-4 ring-primary-50" />
                   
-                  <div className="mb-1 flex items-center justify-between">
-                    <span className="text-sm font-medium text-white">{event.action}</span>
-                    <span className="text-xs text-gray-500">{new Date(event.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                  <div className="mb-1 flex items-start justify-between gap-2">
+                    <span className="text-sm font-semibold text-slate-900 leading-tight">{event.action}</span>
+                    <span className="text-xs text-slate-500 whitespace-nowrap">{new Date(event.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                   </div>
-                  <p className="text-xs text-purple-400 mb-1">{event.actor} (v{event.version})</p>
-                  <p className="text-sm text-gray-400">{event.details}</p>
+                  <p className="text-xs text-primary-600 font-medium mb-1">{event.actor} (v{event.version})</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">{event.details}</p>
                 </div>
               ))}
             </div>
-          </GlassCard>
+          </div>
         </div>
       </div>
     </div>
